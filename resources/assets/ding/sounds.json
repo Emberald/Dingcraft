@@ -1,0 +1,22 @@
+{
+    "bow": {
+    "category": "neutral",
+    "sounds": [
+      "random/bow"
+    ]
+  },
+  
+    "step.ding": {
+    "category": "hostile",
+    "sounds": [
+      "block/dingCurse"
+    ]
+  },
+  
+    "dig.ding": {
+    "category": "hostile",
+    "sounds": [
+      "block/dingGreet"
+    ]
+  }
+}

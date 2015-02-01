@@ -1,2 +1,8 @@
 tile.dingBlock.name=丁方块
-tile.dingItem.name=丁碎片
+item.dingItem.name=丁碎片
+item.dingWand.name=丁法杖
+item.dingBow.name=丁的混乱之永恒弓
+death.attack.void=%1$s的存在被打成碎片
+death.attack.void.player=%1$s的存在被%2$s打成碎片
+death.attack.void.item=%1$s的存在被%2$s通过%3$s打成碎片
+ 
