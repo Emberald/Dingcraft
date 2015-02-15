@@ -1,2 +1,2 @@
 # Dingcraft
-v0.1.0, based on Minecraft 1.8
+Based on Minecraft Forge 1.8
