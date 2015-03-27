@@ -7,6 +7,6 @@ This is the first minecraft mod after my friends and I have learnt Java. The pur
     + _Flame_: enchants arrows with void energy which penetrates everything except creatures when enchantment level of flame is at least 2. 
     + _Inifinity_: increases number of arrows shot at a time as the enchantment level of infinity increases. 
 * New Blocks
-  + _Ding Block_: a block with my friend's face on it. 
+  + _Ding Block_: a creepy block of the face of Albert whose head is rather square-shaped.
 * New items
   + _Ding Wand_: knocks a creature and sends it to the sky. 
