@@ -1,5 +1,5 @@
 # Dingcraft
-###Discription
+###Description
 This is the first minecraft mod after my friends and I have learnt Java. The purpose of creating this mod is to practice our programming skill and, of course, to have fun.
 ###Features
 * Extended Enchantment
