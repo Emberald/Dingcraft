@@ -1,4 +1,4 @@
-package simon.Dingcraft;
+package com.Dingcraft;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;

@@ -1,4 +1,4 @@
-package simon.Dingcraft;
+package com.Dingcraft;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;

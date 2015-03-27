@@ -1,4 +1,4 @@
-package simon.Dingcraft;
+package com.Dingcraft;
 
 import java.util.List;
 
