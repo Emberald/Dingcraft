@@ -33,7 +33,7 @@ public class Dingcraft
     public static ItemDing dingItem;
     public static ItemWandDing dingWand;
 
-    EventHandlerVoidEnchantment handler = new EventHandlerVoidEnchantment();
+    EventHandlerBow handler = new EventHandlerBow();
     
     @EventHandler
     public void preinit(FMLPreInitializationEvent event)
@@ -51,21 +51,6 @@ public class Dingcraft
     	
 		//entity
     	EntityRegistry.registerModEntity(EntityArrowVoid.class, "ArrowVoid", 1, this, 128, 3, true );
-    	
-    	//Craft recipes
-    	/*GameRegistry.addRecipe(new ItemStack(Items.dye, 2, 15), new Object[]{
-    	"AB ",
-    	"AAC",
-    	"A  ",
-    	'A', Items.cookie, 'B', Blocks.dirt, 'C', new ItemStack(Items.dye, 1, 1)
-    	});
-    	GameRegistry.addShapelessRecipe(new ItemStack(Items.dye, 2, 1), new Object[]
-    	{
-    	new ItemStack(Items.dye, 1, 1), Items.redstone
-    	});*/
-    	
-    	//Smelting recipes
-    	/*GameRegistry.addSmelting(new ItemStack(Items.dye, 1, 1), new ItemStack(Items.dye, 1, 11), 0.1F);*/
    }
     
     @EventHandler
