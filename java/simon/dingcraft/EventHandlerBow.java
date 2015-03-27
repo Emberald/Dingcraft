@@ -1,4 +1,4 @@
-package simon.dingcraft;
+package simon.Dingcraft;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -14,27 +14,25 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class EventHandlerBow extends Item
 {	
+	private int[] posMap = {0, 1, -1, 2, -2, 3, -3};
+	
 	@SubscribeEvent
 	public void ArrowLooseEvent(ArrowLooseEvent event)
 	{	
-		ItemStack bow = event.bow;
-		int lvlFlame = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, bow);
+		int lvlFlame = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, event.bow);
+		int lvlInf = EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, event.bow);
 
-    	if (lvlFlame > 1)
+    	if (lvlFlame >= 2 || lvlInf >= 2)
     	{
 			event.setCanceled(true);
-
-    		int lvlInf = EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, bow);
-    		int lvlPunch = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, bow);
-    		int lvlPower = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, bow);
 
     		EntityPlayer player = event.entityPlayer;
     		World worldIn = player.worldObj;
     		int charge = event.charge;
+    		int lvlPunch = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, event.bow);
+    		int lvlPower = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, event.bow);
     		
-    		boolean flagInfArrow = player.capabilities.isCreativeMode || lvlInf > 0;
-    		
-    		if (flagInfArrow || player.inventory.hasItem(Items.arrow))
+    		if (player.capabilities.isCreativeMode || lvlInf > 0 || player.inventory.hasItem(Items.arrow))
     		{	
     			float modifierCharge = charge / 20.0F;
     			modifierCharge = (modifierCharge * modifierCharge + modifierCharge * 2.0F) / 3.0F;	
@@ -46,47 +44,79 @@ public class EventHandlerBow extends Item
     			{
     				modifierCharge = 1.0F;
     			}
-    			
-    			EntityArrowVoid entityarrowvoid = new EntityArrowVoid(worldIn, player, modifierCharge * 2.0F);    					
-    			
-                if (lvlPower > 0)
-            	{
-                	entityarrowvoid.setDamage(entityarrowvoid.getDamage() + (double) (lvlPower) * 0.24D + 0.2D);
-            	}
-                
-        		if (lvlPunch > 0)
-        		{
-        			entityarrowvoid.setKnockbackStrength((int) (MathHelper.sqrt_float((float) (2 * lvlPunch))));
-        		}
-	            	
-    			worldIn.playSoundAtEntity(player,(Dingcraft.MODID + ":" + "bow"), 0.3F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + modifierCharge * 0.25F + 0.2F);
-    			
-    			bow.damageItem(1, player);
-    			
-    			
-    			if (!worldIn.isRemote)
+    			float speed = modifierCharge * 2.0F;
+    			int numArrow = 2 * lvlInf - 3;
+    			if (numArrow < 1) 
     			{
-    				worldIn.spawnEntityInWorld(entityarrowvoid);
+    				numArrow = 1;
     			}
-    			
-    			if (lvlInf == 2)
+    			if (numArrow > 7) 
     			{
-    				EntityArrowVoid entityarrowvoid2 = new EntityArrowVoid(worldIn, player, modifierCharge * 2.0F, -1, 1);    					
-    				EntityArrowVoid entityarrowvoid3 = new EntityArrowVoid(worldIn, player, modifierCharge * 2.0F, -1, 2);    					
-    				EntityArrowVoid entityarrowvoid4 = new EntityArrowVoid(worldIn, player, modifierCharge * 2.0F, 1, 1);    					
-    				EntityArrowVoid entityarrowvoid5 = new EntityArrowVoid(worldIn, player, modifierCharge * 2.0F, 1, 2); 
-    				
-    				entityarrowvoid2.setDamage(entityarrowvoid.getDamage());
-    				entityarrowvoid3.setDamage(entityarrowvoid.getDamage());
-    				entityarrowvoid4.setDamage(entityarrowvoid.getDamage());
-    				entityarrowvoid5.setDamage(entityarrowvoid.getDamage());
-    				
-        			if (!worldIn.isRemote)
+    				numArrow = 7;
+    			}
+				float yawDeviation;
+    			if (lvlFlame >= 2)
+    			{
+        			EntityArrowVoid[] entityarrowvoid = new EntityArrowVoid[numArrow];
+        			for (int i = 0; i < numArrow; i++)
         			{
-        				worldIn.spawnEntityInWorld(entityarrowvoid2);
-        				worldIn.spawnEntityInWorld(entityarrowvoid3);
-        				worldIn.spawnEntityInWorld(entityarrowvoid4);
-        				worldIn.spawnEntityInWorld(entityarrowvoid5);
+        				yawDeviation = posMap[i] * (20 - 2 * numArrow);
+        				entityarrowvoid[i] = new EntityArrowVoid(worldIn, player, speed, yawDeviation);
+            			if (lvlPower > 0)
+                    	{
+                    		entityarrowvoid[i].setDamage(entityarrowvoid[i].getDamage() + (double) (lvlPower) * 0.24D + 0.2D);
+                		}
+                		if (lvlPunch > 0)
+                		{
+                			entityarrowvoid[i].setKnockbackStrength((int) (0.5D * lvlPunch));
+                		}
+                		event.bow.damageItem(15, player);
+                		worldIn.playSoundAtEntity(player, Dingcraft.MODID + ":" + "bow", 0.3F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + modifierCharge * 0.25F + 0.2F);           			
+            			if (!worldIn.isRemote)
+            			{
+            				worldIn.spawnEntityInWorld(entityarrowvoid[i]);
+            			}
+        			}	
+    			}
+    			else
+    			{
+        			EntityArrow[] entityarrow = new EntityArrow[numArrow];
+        			for (int i = 0; i < numArrow; i++)
+        			{        			
+        				entityarrow[i] = new EntityArrow(worldIn, player, speed);
+        				yawDeviation = posMap[i] * (20 - 2 * numArrow);
+        				entityarrow[i].posX += (double)(MathHelper.cos(player.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
+        		        entityarrow[i].posZ += (double)(MathHelper.sin(player.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
+        		        entityarrow[i].posX -= (double)(MathHelper.cos((player.rotationYaw + yawDeviation) / 180.0F * (float)Math.PI) * 0.16F);
+        		        entityarrow[i].posZ -= (double)(MathHelper.sin((player.rotationYaw + yawDeviation) / 180.0F * (float)Math.PI) * 0.16F);
+        		        entityarrow[i].setPosition(entityarrow[i].posX, entityarrow[i].posY, entityarrow[i].posZ);
+        		        entityarrow[i].motionX = (double)(-MathHelper.sin((player.rotationYaw + yawDeviation) / 180.0F * (float)Math.PI) * MathHelper.cos(entityarrow[i].rotationPitch / 180.0F * (float)Math.PI));
+        		        entityarrow[i].motionZ = (double)(MathHelper.cos((player.rotationYaw + yawDeviation) / 180.0F * (float)Math.PI) * MathHelper.cos(entityarrow[i].rotationPitch / 180.0F * (float)Math.PI));
+        		        entityarrow[i].setThrowableHeading(entityarrow[i].motionX, entityarrow[i].motionY, entityarrow[i].motionZ, speed * 1.5F, 1.0F);
+        				
+        				if (modifierCharge == 1.0F)
+        	            {
+        	                entityarrow[i].setIsCritical(true);
+        	            }
+        				if (lvlPower > 0)
+                    	{
+                    		entityarrow[i].setDamage(entityarrow[i].getDamage() + (double) (lvlPower) * 0.5D + 0.5D);
+                		}
+                		if (lvlPunch > 0)
+                		{
+                			entityarrow[i].setKnockbackStrength(lvlPunch);
+                		}
+                		if (lvlFlame > 0)
+                        {
+                			entityarrow[i].setFire(100);
+                        }
+                		event.bow.damageItem(1, player);
+                        worldIn.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + modifierCharge * 0.5F);
+                        entityarrow[i].canBePickedUp = 2;
+            			if (!worldIn.isRemote)
+            			{
+            				worldIn.spawnEntityInWorld(entityarrow[i]);
+            			}
         			}
     			}
        		}
