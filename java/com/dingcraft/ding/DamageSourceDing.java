@@ -1,13 +1,14 @@
-package com.Dingcraft;
+package com.dingcraft.ding;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
+
+import com.dingcraft.ding.entity.EntityArrowVoid;
 
 public class DamageSourceDing extends DamageSource
 {

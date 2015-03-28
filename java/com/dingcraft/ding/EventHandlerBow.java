@@ -1,4 +1,4 @@
-package com.Dingcraft;
+package com.dingcraft.ding;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -6,11 +6,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import com.dingcraft.ding.entity.EntityArrowVoid;
 
 public class EventHandlerBow extends Item
 {	

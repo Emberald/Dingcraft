@@ -1,4 +1,4 @@
-package com.Dingcraft;
+package com.dingcraft.ding;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -12,6 +12,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.lwjgl.opengl.GL11;
+
+import com.dingcraft.ding.entity.EntityArrowVoid;
 
 
 

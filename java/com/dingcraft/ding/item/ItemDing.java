@@ -1,4 +1,4 @@
-package com.Dingcraft;
+package com.dingcraft.ding.item;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;

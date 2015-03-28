@@ -1,9 +1,8 @@
-package com.Dingcraft;
+package com.dingcraft.ding.entity;
 
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -25,6 +24,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.dingcraft.ding.DamageSourceDing;
 
 public class EntityArrowVoid extends Entity implements IProjectile
 {

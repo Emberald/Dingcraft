@@ -1,11 +1,9 @@
-package com.Dingcraft;
+package com.dingcraft.ding.item;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ItemWandDing extends Item
 {
