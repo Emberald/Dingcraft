@@ -11,6 +11,7 @@ import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
 import net.minecraft.util.AxisAlignedBB;
@@ -26,6 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.dingcraft.ding.DamageSourceDing;
+import com.dingcraft.ding.Dingcraft;
 
 public class EntityArrowVoid extends Entity implements IProjectile
 {
@@ -40,10 +42,12 @@ public class EntityArrowVoid extends Entity implements IProjectile
     private double damage = 2.0D;
     private int knockbackStrength;
     
-    MovingObjectPosition keepermovingobjectposition;
-    Entity shooter2;
-    boolean flag = false;
-    
+    private int numFission = 0;
+    private World worldIn;
+    private float speed;
+	public final int limitFission = 2;
+	public final int[] posMap = {1, -1, 2, -2, 3, -3};
+	
     public EntityArrowVoid(World worldIn)
     {
         super(worldIn);
@@ -83,22 +87,17 @@ public class EntityArrowVoid extends Entity implements IProjectile
         }
     }
 
-    public EntityArrowVoid(World worldIn, EntityLivingBase shooter, float speed)
+    public EntityArrowVoid(World worldIn, EntityLivingBase shooter, float speed, int numFission)
     {
         super(worldIn);
+        this.worldIn = worldIn;
+        this.speed = speed;
+        
         this.renderDistanceWeight = 10.0D;
         this.shootingEntity = shooter;
+        this.numFission = numFission;
         
         this.setSize(0.5F, 0.5F);
-        this.setLocationAndAngles(shooter.posX, shooter.posY + (double)shooter.getEyeHeight(), shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
-        this.posX -= (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
-        this.posY -= 0.10000000149011612D;
-        this.posZ -= (double)(MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
-        this.setPosition(this.posX, this.posY, this.posZ);
-        this.motionX = (double)(-MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI));
-        this.motionZ = (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI));
-        this.motionY = (double)(-MathHelper.sin(this.rotationPitch / 180.0F * (float)Math.PI));
-        this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, speed * 1.5F, 1.0F);
     }
     
     public EntityArrowVoid(World worldIn, EntityLivingBase shooter, float speed, float yawDeviation)
@@ -263,7 +262,7 @@ public class EntityArrowVoid extends Entity implements IProjectile
                 {
                     damagesource = DamageSourceDing.causeVoidDamage((EntityArrowVoid) this,(Entity) this.shootingEntity);
                 }
-
+                movingobjectposition.entityHit.hurtResistantTime = 0;//
                 if (this.isBurning() && !(movingobjectposition.entityHit instanceof EntityEnderman))
                 {
                     movingobjectposition.entityHit.setFire(5);
@@ -413,7 +412,26 @@ public class EntityArrowVoid extends Entity implements IProjectile
         this.motionY -= (double)f1;
         this.setPosition(this.posX, this.posY, this.posZ);
         this.doBlockCollisions();
-    
+        
+        if (ticksInAir > 2 && numFission >= 1)
+        {
+        	EntityArrowVoid[] entityarrowFission = new EntityArrowVoid[limitFission];
+        	float deviationYaw;
+        	for (int index = 0; index < limitFission; index++)
+        	{
+        		entityarrowFission[index] = new EntityArrowVoid(worldIn,(EntityLivingBase) shootingEntity, speed, numFission - 1);
+        		entityarrowFission[index].setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+                entityarrowFission[index].setThrowableHeading(this.motionX, this.motionY, this.motionZ, speed * 1.5F, 5.0F);
+        		entityarrowFission[index].setDamage(damage);
+    			entityarrowFission[index].setKnockbackStrength(knockbackStrength);
+
+        		if (!worldIn.isRemote)
+    			{
+    				worldIn.spawnEntityInWorld(entityarrowFission[index]);
+    			}
+        	}
+            this.setDead();
+        }
     }
 
     public void writeEntityToNBT(NBTTagCompound tagCompound)

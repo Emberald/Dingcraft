@@ -15,7 +15,7 @@ import com.dingcraft.ding.entity.EntityArrowVoid;
 
 public class EventHandlerBow extends Item
 {	
-	private int[] posMap = {0, 1, -1, 2, -2, 3, -3};
+	public final int[] posMap = {0, 1, -1, 2, -2, 3, -3};
 	
 	@SubscribeEvent
 	public void ArrowLooseEvent(ArrowLooseEvent event)
@@ -27,14 +27,15 @@ public class EventHandlerBow extends Item
     	{
 			event.setCanceled(true);
 
-    		EntityPlayer player = event.entityPlayer;
-    		World worldIn = player.worldObj;
-    		int charge = event.charge;
-    		int lvlPunch = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, event.bow);
-    		int lvlPower = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, event.bow);
-    		
-    		if (player.capabilities.isCreativeMode || lvlInf > 0 || player.inventory.hasItem(Items.arrow))
+			EntityPlayer player = event.entityPlayer;    		
+    		boolean isArrowUnlimited = player.capabilities.isCreativeMode || lvlInf > 0;
+    		if (isArrowUnlimited || player.inventory.hasItem(Items.arrow))
     		{	
+        		World worldIn = player.worldObj;
+        		int charge = event.charge;
+        		int lvlPunch = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, event.bow);
+        		int lvlPower = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, event.bow);
+        		
     			float modifierCharge = charge / 20.0F;
     			modifierCharge = (modifierCharge * modifierCharge + modifierCharge * 2.0F) / 3.0F;	
     			if ((double) modifierCharge < 0.1D)
@@ -46,6 +47,7 @@ public class EventHandlerBow extends Item
     				modifierCharge = 1.0F;
     			}
     			float speed = modifierCharge * 2.0F;
+    			
     			int numArrow = 2 * lvlInf - 3;
     			if (numArrow < 1) 
     			{
@@ -56,43 +58,31 @@ public class EventHandlerBow extends Item
     				numArrow = 7;
     			}
 				float yawDeviation;
-    			if (lvlFlame >= 2)
-    			{
-        			EntityArrowVoid[] entityarrowvoid = new EntityArrowVoid[numArrow];
-        			for (int i = 0; i < numArrow; i++)
-        			{
-        				yawDeviation = posMap[i] * (20 - 2 * numArrow);
-        				entityarrowvoid[i] = new EntityArrowVoid(worldIn, player, speed, yawDeviation);
-            			if (lvlPower > 0)
-                    	{
-                    		entityarrowvoid[i].setDamage(entityarrowvoid[i].getDamage() + (double) (lvlPower) * 0.24D + 0.2D);
-                		}
-                		if (lvlPunch > 0)
-                		{
-                			entityarrowvoid[i].setKnockbackStrength((int) (0.5D * lvlPunch));
-                		}
-                		event.bow.damageItem(15, player);
-                		worldIn.playSoundAtEntity(player, Dingcraft.MODID + ":" + "bow", 0.3F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + modifierCharge * 0.25F + 0.2F);           			
-            			if (!worldIn.isRemote)
-            			{
-            				worldIn.spawnEntityInWorld(entityarrowvoid[i]);
-            			}
-        			}	
-    			}
-    			else
-    			{
-        			EntityArrow[] entityarrow = new EntityArrow[numArrow];
+				
+				switch (lvlFlame)
+				{
+				case 0:
+				case 1:
+					EntityArrow[] entityarrow = new EntityArrow[numArrow];
         			for (int i = 0; i < numArrow; i++)
         			{        			
-        				entityarrow[i] = new EntityArrow(worldIn, player, speed);
-        				yawDeviation = posMap[i] * (20 - 2 * numArrow);
-        				entityarrow[i].posX += (double)(MathHelper.cos(player.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
-        		        entityarrow[i].posZ += (double)(MathHelper.sin(player.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
-        		        entityarrow[i].posX -= (double)(MathHelper.cos((player.rotationYaw + yawDeviation) / 180.0F * (float)Math.PI) * 0.16F);
-        		        entityarrow[i].posZ -= (double)(MathHelper.sin((player.rotationYaw + yawDeviation) / 180.0F * (float)Math.PI) * 0.16F);
+        				entityarrow[i] = new EntityArrow(worldIn);
+        				entityarrow[i].shootingEntity = player;
+
+        		        if (player instanceof EntityPlayer)
+        		        {
+        		            entityarrow[i].canBePickedUp = 1;
+        		        }
+        		        
+        		        entityarrow[i].setLocationAndAngles(player.posX, player.posY + (double)player.getEyeHeight(), player.posZ, player.rotationYaw, player.rotationPitch);
+        				yawDeviation = player.rotationYaw + posMap[i] * (20 - 2 * numArrow);
+        		        entityarrow[i].posX -= (double)(MathHelper.cos(yawDeviation / 180.0F * (float)Math.PI) * 0.16F);
+        		        entityarrow[i].posY -= 0.10000000149011612D;
+        		        entityarrow[i].posZ -= (double)(MathHelper.sin(yawDeviation / 180.0F * (float)Math.PI) * 0.16F);
         		        entityarrow[i].setPosition(entityarrow[i].posX, entityarrow[i].posY, entityarrow[i].posZ);
-        		        entityarrow[i].motionX = (double)(-MathHelper.sin((player.rotationYaw + yawDeviation) / 180.0F * (float)Math.PI) * MathHelper.cos(entityarrow[i].rotationPitch / 180.0F * (float)Math.PI));
-        		        entityarrow[i].motionZ = (double)(MathHelper.cos((player.rotationYaw + yawDeviation) / 180.0F * (float)Math.PI) * MathHelper.cos(entityarrow[i].rotationPitch / 180.0F * (float)Math.PI));
+        		        entityarrow[i].motionX = (double)(-MathHelper.sin(yawDeviation / 180.0F * (float)Math.PI) * MathHelper.cos(entityarrow[i].rotationPitch / 180.0F * (float)Math.PI));
+        		        entityarrow[i].motionZ = (double)(MathHelper.cos(yawDeviation / 180.0F * (float)Math.PI) * MathHelper.cos(entityarrow[i].rotationPitch / 180.0F * (float)Math.PI));
+        		        entityarrow[i].motionY = (double)(-MathHelper.sin(entityarrow[i].rotationPitch / 180.0F * (float)Math.PI));
         		        entityarrow[i].setThrowableHeading(entityarrow[i].motionX, entityarrow[i].motionY, entityarrow[i].motionZ, speed * 1.5F, 1.0F);
         				
         				if (modifierCharge == 1.0F)
@@ -113,13 +103,84 @@ public class EventHandlerBow extends Item
                         }
                 		event.bow.damageItem(1, player);
                         worldIn.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + modifierCharge * 0.5F);
-                        entityarrow[i].canBePickedUp = 2;
+                        if (isArrowUnlimited)
+                        {
+                            entityarrow[i].canBePickedUp = 2;
+                        }
+                        else
+                        {
+                            player.inventory.consumeInventoryItem(Items.arrow);
+                        }
             			if (!worldIn.isRemote)
             			{
             				worldIn.spawnEntityInWorld(entityarrow[i]);
             			}
         			}
-    			}
+        			break;
+        			
+				case 2:
+					EntityArrowVoid[] entityarrowvoid = new EntityArrowVoid[numArrow];
+        			for (int i = 0; i < numArrow; i++)
+        			{
+        				yawDeviation = posMap[i] * (20 - 2 * numArrow);
+        				entityarrowvoid[i] = new EntityArrowVoid(worldIn, player, speed, yawDeviation);
+            			if (lvlPower > 0)
+                    	{
+                    		entityarrowvoid[i].setDamage(entityarrowvoid[i].getDamage() + (double) (lvlPower) * 0.24D + 0.2D);
+                		}
+                		if (lvlPunch > 0)
+                		{
+                			entityarrowvoid[i].setKnockbackStrength((int) (0.5D * lvlPunch));
+                		}
+                		event.bow.damageItem(5, player);
+                		worldIn.playSoundAtEntity(player, Dingcraft.MODID + ":" + "bow", 0.3F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + modifierCharge * 0.25F + 0.2F);           			
+                		if (!isArrowUnlimited)
+                        {
+                            player.inventory.consumeInventoryItem(Items.arrow);
+                        }
+                		if (!worldIn.isRemote)
+            			{
+            				worldIn.spawnEntityInWorld(entityarrowvoid[i]);
+            			}
+        			}	
+        			break;
+        			
+				default:
+					int numFission = lvlInf;
+        			EntityArrowVoid entityarrowFission = new EntityArrowVoid(worldIn, player, speed, numFission);
+        			entityarrowFission.setLocationAndAngles(player.posX, player.posY + (double)player.getEyeHeight(), player.posZ, player.rotationYaw, player.rotationPitch);
+                    entityarrowFission.posX -= (double)(MathHelper.cos(entityarrowFission.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
+                    entityarrowFission.posY -= 0.10000000149011612D;
+                    entityarrowFission.posZ -= (double)(MathHelper.sin(entityarrowFission.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
+                    entityarrowFission.setPosition(entityarrowFission.posX, entityarrowFission.posY, entityarrowFission.posZ);
+                    entityarrowFission.motionX = (double)(-MathHelper.sin(entityarrowFission.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(entityarrowFission.rotationPitch / 180.0F * (float)Math.PI));
+                    entityarrowFission.motionZ = (double)(MathHelper.cos(entityarrowFission.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(entityarrowFission.rotationPitch / 180.0F * (float)Math.PI));
+                    entityarrowFission.motionY = (double)(-MathHelper.sin(entityarrowFission.rotationPitch / 180.0F * (float)Math.PI));
+                    entityarrowFission.setThrowableHeading(entityarrowFission.motionX, entityarrowFission.motionY, entityarrowFission.motionZ, speed * 1.5F, 1.0F);
+                    
+        			if (lvlPower > 0)
+                	{
+                		entityarrowFission.setDamage(entityarrowFission.getDamage() + (double) (lvlPower) * 0.24D + 0.2D);
+            		}
+            		if (lvlPunch > 0)
+            		{
+            			entityarrowFission.setKnockbackStrength((int) (0.5D * lvlPunch));
+            		}
+            		event.bow.damageItem(20, player);
+            		worldIn.playSoundAtEntity(player, Dingcraft.MODID + ":" + "bow", 0.3F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + modifierCharge * 0.25F + 0.2F);           			
+            		if (!isArrowUnlimited)
+                    {
+            			for (int i = 0; i < Math.pow(2, numFission + 1) - 1; i++)
+            			{
+                            player.inventory.consumeInventoryItem(Items.arrow);
+            			}
+                    }
+            		if (!worldIn.isRemote)
+        			{
+        				worldIn.spawnEntityInWorld(entityarrowFission);
+        			}
+					break;
+				}
        		}
     	}
 	}
