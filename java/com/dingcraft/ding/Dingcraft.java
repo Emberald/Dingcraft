@@ -1,8 +1,7 @@
-package com.dingcraft.ding;
+package simon.dingcraft;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -11,60 +10,51 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
-import com.dingcraft.ding.block.BlockDing;
-import com.dingcraft.ding.entity.EntityArrowVoid;
-import com.dingcraft.ding.item.ItemDing;
-import com.dingcraft.ding.item.ItemWandDing;
-import com.dingcraft.ding.proxy.CommonProxy;
+import simon.dingcraft.block.BlockDing;
+import simon.dingcraft.entity.EntityArrowVoid;
+import simon.dingcraft.item.ItemDing;
+import simon.dingcraft.item.ItemWandDing;
+import simon.dingcraft.network.CommonProxy;
 
 @Mod(modid = Dingcraft.MODID, name = Dingcraft.MODNAME, version = Dingcraft.VERSION)
 public class Dingcraft
 {
-    public static final String MODID = "ding";
-    public static final String MODNAME = "Dingcraft";
-    public static final String VERSION = "0.2.0";
+	public static final String MODID = "ding";
+	public static final String MODNAME = "Dingcraft";
+	public static final String VERSION = "0.2.0";
 
-    @SidedProxy(clientSide = "com.dingcraft.ding.proxy.ClientProxy", serverSide = "com.dingcraft.ding.proxy.CommonProxy")
+	@SidedProxy(clientSide = "simon.dingcraft.network.ClientProxy", serverSide = "simon.dingcraft.network.CommonProxy")
 	public static CommonProxy proxy;
-    
-    @Instance(Dingcraft.MODID)
-    public static Dingcraft instance;
-    
-    public static BlockDing dingBlock;
-    public static ItemDing dingItem;
-    public static ItemWandDing dingWand;
 
-    EventHandlerBow handlerBow = new EventHandlerBow();
-    
-    @EventHandler
-    public void preinit(FMLPreInitializationEvent event)
-    {
-    	//blocks
-    	dingBlock = new BlockDing();
-		GameRegistry.registerBlock(dingBlock.setCreativeTab(CreativeTabs.tabBlock).setUnlocalizedName(dingBlock.getName()).setHardness(2.0f).setResistance(10.0f).setLightLevel(0.3f)/*.setStepSound(BlockDing.soundTypeDing)*/, dingBlock.getName());
-		dingBlock.setHarvestLevel("pickaxe", 0);
-    	
-    	//items
-		dingItem = new ItemDing();
-		GameRegistry.registerItem(dingItem.setCreativeTab(CreativeTabs.tabMaterials).setUnlocalizedName(dingItem.getName()), dingItem.getName());
-		dingWand = new ItemWandDing();
-		GameRegistry.registerItem(dingWand.setCreativeTab(CreativeTabs.tabCombat).setUnlocalizedName(dingWand.getName()).setMaxDamage(30).setMaxStackSize(1), dingWand.getName());    	
-    	
+	@Instance(Dingcraft.MODID)
+	public static Dingcraft instance;
+
+	public static BlockDing dingBlock = new BlockDing();
+	public static ItemDing dingItem = new ItemDing();
+	public static ItemWandDing dingWand = new ItemWandDing();
+
+	public static DingEventHandler handler = new DingEventHandler();
+
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event)
+	{
+		//blocks
+		GameRegistry.registerBlock(Dingcraft.dingBlock, BlockDing.name);
+		//items
+		GameRegistry.registerItem(Dingcraft.dingItem, ItemDing.name);
+		GameRegistry.registerItem(Dingcraft.dingWand, ItemWandDing.name);    	
 		//entity
-    	EntityRegistry.registerModEntity(EntityArrowVoid.class, "ArrowVoid", 1, this, 128, 3, true);
-    }
-    
-    @EventHandler
-    public void init(FMLInitializationEvent event)
-    {	
-		//Forge event handler registry
-    	MinecraftForge.EVENT_BUS.register(handlerBow);
-    	//FML event handler registry
-    	FMLCommonHandler.instance().bus().register(handlerBow);
-    	
-    	//Renderers
-    	// Model classes are all client-side only, so we must register them on the client side
-    	proxy.registerRenderers();
-    }
+		EntityRegistry.registerModEntity(EntityArrowVoid.class, "ArrowStandard", 1, Dingcraft.instance, 64, 10, true);
+		//craft and smelt
+		GameRegistry.addRecipe(new ItemStack(Dingcraft.dingBlock),"AAA","AAA","AAA",'A',new ItemStack(Dingcraft.dingItem));
+		GameRegistry.addRecipe(new ItemStack(Dingcraft.dingItem,9),"A",'A',Dingcraft.dingBlock);
+		GameRegistry.addSmelting(new ItemStack(Items.gold_ingot),new ItemStack(Dingcraft.dingItem), 4F);
+		GameRegistry.addRecipe(new ItemStack(Dingcraft.dingWand),"A","B","B",'A',new ItemStack(Dingcraft.dingItem),'B',Items.stick);
+	}
+
+	@EventHandler
+	public void init(FMLInitializationEvent event)
+	{
+		proxy.register();
+	}
 }

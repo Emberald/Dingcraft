@@ -1,17 +1,14 @@
-package com.dingcraft.ding.item;
+package simon.dingcraft.item;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.common.registry.GameRegistry;
- 
+
 public class ItemDing extends Item
 {
-	private final String name = "dingItem";
-
-	public ItemDing() {}
-	
-	public String getName()
+	public static final String name = "dingItem";
+	public ItemDing()
 	{
-		return name;
+		this.setCreativeTab(CreativeTabs.tabMaterials);
+		this.setUnlocalizedName(this.name);
 	}
 }
