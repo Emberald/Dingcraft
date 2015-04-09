@@ -8,9 +8,9 @@ public class CommonProxy
 {
 	public void register()
 	{
-//		Forge event handler registry
+		//Forge event handler registry
 		MinecraftForge.EVENT_BUS.register(Dingcraft.handler);
-//		FML event handler registry
+		//FML event handler registry
 		FMLCommonHandler.instance().bus().register(Dingcraft.handler);
 	}
 }

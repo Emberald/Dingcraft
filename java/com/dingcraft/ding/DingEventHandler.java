@@ -5,13 +5,10 @@ import java.util.Random;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Items;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.S49PacketUpdateEntityNBT;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import simon.dingcraft.entity.EntityArrowVoid;
+import simon.dingcraft.entity.EntityArrowFission;
 
 public class DingEventHandler
 {	
@@ -33,7 +30,7 @@ public class DingEventHandler
 			if(charge > 2.0F)
 				charge = 2.0F;
 			World world = event.entityPlayer.worldObj;
-			EntityArrowVoid arrow = new EntityArrowVoid(world, event.entityPlayer, charge);
+			EntityArrowFission arrow = new EntityArrowFission(world, event.entityPlayer, charge);
 			if(charge == 2.0F)
 				arrow.isCritical = true;
 			int lvlPower = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, event.bow);
