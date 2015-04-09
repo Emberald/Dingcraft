@@ -1,6 +1,8 @@
 package simon.dingcraft.entity;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -67,17 +69,17 @@ public class EntityArrowTorch extends EntityArrowGeneral
 			return 1;
 	}
 
-	protected boolean onBlockHit(BlockPos blockPos, Vec3 hitVec, EnumFacing sideHit)
+	protected boolean onBlockHit(BlockPos blockPosHit, Vec3 hitVec, EnumFacing sideHit)
 	{
-		if(sideHit.equals(EnumFacing.DOWN) || this.worldObj.getBlockState(blockPos.offset(sideHit)).getBlock().equals(Blocks.torch))
+		BlockPos blockPosIn = blockPosHit.offset(sideHit);
+		Block blockIn = this.worldObj.getBlockState(blockPosIn).getBlock();
+		if(sideHit.equals(EnumFacing.DOWN) || blockIn.equals(Blocks.torch) || !blockIn.getMaterial().isReplaceable())
 			return true;
-		IBlockState blockState = this.worldObj.getBlockState(blockPos);
-		if((sideHit.equals(EnumFacing.UP) && blockState.getBlock().canPlaceTorchOnTop(this.worldObj, blockPos))
-			|| (sideHit.getAxis().isHorizontal() && this.worldObj.isSideSolid(blockPos, sideHit, false)))
+		if((sideHit.equals(EnumFacing.UP) && this.worldObj.getBlockState(blockPosHit).getBlock().canPlaceTorchOnTop(this.worldObj, blockPosHit))
+			|| (sideHit.getAxis().isHorizontal() && this.worldObj.isSideSolid(blockPosHit, sideHit, false)))
 		{
-			BlockTorch torch = (BlockTorch)Blocks.torch;
-			IBlockState blockState1 = torch.onBlockPlaced(this.worldObj, blockPos.offset(sideHit), sideHit, (float)hitVec.xCoord, (float)hitVec.yCoord, (float)hitVec.zCoord, 0, (EntityLivingBase)null);
-			this.worldObj.setBlockState(blockPos.offset(sideHit), blockState1, 3);
+			IBlockState blockState1 = ((BlockTorch)Blocks.torch).onBlockPlaced(this.worldObj, blockPosIn, sideHit, (float)hitVec.xCoord, (float)hitVec.yCoord, (float)hitVec.zCoord, 0, (EntityLivingBase)null);
+			this.worldObj.setBlockState(blockPosIn, blockState1, 3);
 			this.setDead();
 		}
 		return true;
