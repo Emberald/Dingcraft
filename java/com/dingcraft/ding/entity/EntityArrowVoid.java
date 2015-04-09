@@ -53,7 +53,7 @@ public class EntityArrowVoid extends EntityArrowGeneral
 		}
 	}
 	
-	public int onEntityHit(Entity entityHit, float damage)
+	protected int onEntityHit(Entity entityHit, float damage)
 	{
 		DamageSource damagesource;
 		if(this.shooter != null)
@@ -69,7 +69,7 @@ public class EntityArrowVoid extends EntityArrowGeneral
 			return 1;
 	}
 
-	public boolean onBlockHit(BlockPos blockPos, Vec3 hitVec, EnumFacing sideHit)
+	protected boolean onBlockHit(BlockPos blockPos, Vec3 hitVec, EnumFacing sideHit)
 	{
 		return true;
 	}

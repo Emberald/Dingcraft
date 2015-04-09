@@ -9,6 +9,8 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import simon.dingcraft.Dingcraft;
 import simon.dingcraft.block.BlockDing;
 import simon.dingcraft.entity.EntityArrowFission;
+import simon.dingcraft.entity.EntityArrowTorch;
+import simon.dingcraft.entity.EntityArrowVoid;
 import simon.dingcraft.item.ItemDing;
 import simon.dingcraft.item.ItemWandDing;
 import simon.dingcraft.renderer.RenderArrowGeneral;
@@ -28,5 +30,7 @@ public class ClientProxy extends CommonProxy
 		//entities
 		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
 		RenderingRegistry.registerEntityRenderingHandler(EntityArrowFission.class, new RenderArrowGeneral(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityArrowVoid.class, new RenderArrowGeneral(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityArrowTorch.class, new RenderArrowGeneral(renderManager));
 	}
 }

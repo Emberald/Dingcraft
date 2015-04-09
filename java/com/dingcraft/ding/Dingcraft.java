@@ -12,6 +12,8 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import simon.dingcraft.block.BlockDing;
 import simon.dingcraft.entity.EntityArrowFission;
+import simon.dingcraft.entity.EntityArrowTorch;
+import simon.dingcraft.entity.EntityArrowVoid;
 import simon.dingcraft.item.ItemDing;
 import simon.dingcraft.item.ItemWandDing;
 import simon.dingcraft.network.CommonProxy;
@@ -44,7 +46,9 @@ public class Dingcraft
 		GameRegistry.registerItem(Dingcraft.dingItem, ItemDing.name);
 		GameRegistry.registerItem(Dingcraft.dingWand, ItemWandDing.name);    	
 		//entity
-		EntityRegistry.registerModEntity(EntityArrowFission.class, "ArrowFission", 1, Dingcraft.instance, 64, 10, true);
+		EntityRegistry.registerModEntity(EntityArrowFission.class, "FissionArrow", 1, Dingcraft.instance, 64, 10, true);
+		EntityRegistry.registerModEntity(EntityArrowVoid.class, "VoidArrow", 2, Dingcraft.instance, 64, 10, true);
+		EntityRegistry.registerModEntity(EntityArrowTorch.class, "TorchArrow", 3, Dingcraft.instance, 64, 10, true);
 		//craft and smelt
 		GameRegistry.addRecipe(new ItemStack(Dingcraft.dingBlock),"AAA","AAA","AAA",'A',new ItemStack(Dingcraft.dingItem));
 		GameRegistry.addRecipe(new ItemStack(Dingcraft.dingItem,9),"A",'A',Dingcraft.dingBlock);

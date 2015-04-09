@@ -4,6 +4,7 @@ import simon.dingcraft.Dingcraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
@@ -15,11 +16,11 @@ import net.minecraft.world.World;
 
 public class EntityArrowFission extends EntityArrowGeneral
 {
-	private int fissionCnt = 6;
+	protected int fissionCnt = 6;
 	
 	protected ResourceLocation getTexture()
 	{
-		return new ResourceLocation(Dingcraft.MODID + ":textures/entity/arrowDing.png");
+		return new ResourceLocation("textures/entity/arrow.png");
 	}
 	
 	public EntityArrowFission(World worldIn)
@@ -40,6 +41,18 @@ public class EntityArrowFission extends EntityArrowGeneral
 	public EntityArrowFission(World worldIn, EntityLivingBase shooter, float charge)
 	{
 		super(worldIn, shooter, charge);
+	}
+	
+	public void writeEntityToNBT(NBTTagCompound tagCompound)
+	{
+		super.writeEntityToNBT(tagCompound);
+		tagCompound.setByte("fissionCnt", (byte)this.fissionCnt);
+	}
+	
+	public void readEntityFromNBT(NBTTagCompound tagCompound)
+	{
+		super.readEntityFromNBT(tagCompound);
+		this.fissionCnt = tagCompound.getByte("fissionCnt");
 	}
 
 	public void onUpdate()
@@ -65,7 +78,7 @@ public class EntityArrowFission extends EntityArrowGeneral
 		this.fissionCnt = fissionCnt;
 	}
 	
-	public int onEntityHit(Entity entity, float damage)
+	protected int onEntityHit(Entity entity, float damage)
 	{
 		if(entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.disableDamage)
 			return 0;
@@ -80,7 +93,7 @@ public class EntityArrowFission extends EntityArrowGeneral
 			return 1;
 	}
 
-	public boolean onBlockHit(BlockPos blockPos, Vec3 hitVec, EnumFacing sideHit)
+	protected boolean onBlockHit(BlockPos blockPos, Vec3 hitVec, EnumFacing sideHit)
 	{
 		this.fissionCnt = 0;
 		return true;

@@ -459,9 +459,9 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 	}
 
 	//this function should return 0 for entity not hit, 1 for hit but did not cause damage, 2 for not hit but caused damage, and 3 for hit and caused damage.
-	public abstract int onEntityHit(Entity entity, float damage);
+	protected abstract int onEntityHit(Entity entity, float damage);
 
 	//this function should return true for hit the block, and false for not hit the block.
-	public abstract boolean onBlockHit(BlockPos blockPos, Vec3 hitVec, EnumFacing sideHit);
+	protected abstract boolean onBlockHit(BlockPos blockPos, Vec3 hitVec, EnumFacing sideHit);
 
 }
