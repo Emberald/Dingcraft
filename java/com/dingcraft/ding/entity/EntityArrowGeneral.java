@@ -234,10 +234,8 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 		if (!this.worldObj.isRemote && this.ticksInGround > 0 && this.arrowShake <= 0)
 		{
 			boolean flag = this.canBePickedUp == 1 || this.canBePickedUp == 2 && entityIn.capabilities.isCreativeMode;
-
 			if (this.canBePickedUp == 1 && !entityIn.inventory.addItemStackToInventory(new ItemStack(Items.arrow, 1)))
 				flag = false;
-
 			if (flag)
 			{
 				this.playSound("random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
@@ -454,7 +452,8 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 				byte x = (byte)MathHelper.floor_double((this.posX - this.prevPosX) * 32.0D);
 				byte y = (byte)MathHelper.floor_double((this.posY - this.prevPosY) * 32.0D);
 				byte z = (byte)MathHelper.floor_double((this.posZ - this.prevPosZ) * 32.0D);
-				((WorldServer)this.worldObj).getEntityTracker().sendToAllTrackingEntity(this, new S14PacketEntity.S15PacketEntityRelMove(this.getEntityId(), x, y, z, this.onGround));
+				if(Math.abs(x) >= 4 || Math.abs(y) >= 4 || Math.abs(z) >= 4)
+					((WorldServer)this.worldObj).getEntityTracker().sendToAllTrackingEntity(this, new S14PacketEntity.S15PacketEntityRelMove(this.getEntityId(), x, y, z, this.onGround));
 			}
 		}
 	}
