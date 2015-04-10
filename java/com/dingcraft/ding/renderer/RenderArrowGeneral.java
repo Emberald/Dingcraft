@@ -1,4 +1,4 @@
-package simon.dingcraft.renderer;
+package com.dingcraft.ding.renderer;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -8,14 +8,12 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.lwjgl.opengl.GL11;
 
-import simon.dingcraft.entity.EntityArrowGeneral;
-import simon.dingcraft.entity.EntityArrowVoid;
+import com.dingcraft.ding.entity.EntityArrowGeneral;
 
 @SideOnly(Side.CLIENT)
 public class RenderArrowGeneral extends Render

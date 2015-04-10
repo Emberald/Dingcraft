@@ -1,4 +1,4 @@
-package simon.dingcraft.entity;
+package com.dingcraft.ding.entity;
 
 import java.util.List;
 
@@ -47,11 +47,12 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 	protected int tileData;
 	private boolean firstUpdate = true;
 
-	//Change these value in subclass constructor if necessary.
+	//Change these properties in subclass constructor when necessary.
 	protected float dragInAir = 0.99F;
 	protected float dragInWater = 0.6F;
 	protected float gravity = 0.05F;
-
+	protected EnumParticleTypes typePartical = EnumParticleTypes.CRIT;
+	
 	public final ResourceLocation arrowTextures = this.getTexture();
 
 	protected abstract ResourceLocation getTexture();
@@ -283,7 +284,7 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 		if(this.arrowShake > 0)
 			--this.arrowShake;
 		if(this.inGround)
-		{	//in ground, check if the tile is broken
+		{	//when in ground, check whether the tile is broken
 			IBlockState blockState = this.worldObj.getBlockState(new BlockPos(this.tilePosX, this.tilePosY, this.tilePosZ));
 			Block block = blockState.getBlock();
 			if (block == this.tileIn && block.getMetaFromState(blockState) == this.tileData)
@@ -301,9 +302,9 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 			}
 		}
 		else
-		{	//in air
+		{	//when in air,
 			++this.ticksInAir;
-			//check if hits any entities
+			//check whether any entities are hit
 			Vec3 currPos = new Vec3(this.posX, this.posY, this.posZ);
 			Vec3 nextPos = new Vec3(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 			Entity entityHit = null;
@@ -329,12 +330,15 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 					}
 				}
 			}
+			//when hitting an entity
 			if(entityHit != null)
 			{
+				//when hitting a player, check whether it can be hit
 				if(entityHit instanceof EntityPlayer && this.shooter instanceof EntityPlayer)
 					if(!((EntityPlayer)this.shooter).canAttackPlayer((EntityPlayer)entityHit))
 						entityHit = null;
 			}
+			//when hitting an entity
 			if(entityHit != null)
 			{
 				speed = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
@@ -342,7 +346,7 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 				if (this.isCritical)
 					damageAmount += this.rand.nextInt(damageAmount / 2 + 2);
 				int flag = this.onEntityHit(entityHit, damageAmount);
-				if((flag & 2) != 0)//knockback, set fire, etc.
+				if((flag & 2) != 0)//if causes damage, also knockback, set fire, etc.
 				{
 					if(this.isBurning())
 						entityHit.setFire(5);
@@ -368,7 +372,7 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 					if((flag & 1) != 0)
 						this.setDead();
 				}
-				else if((flag & 1) != 0)//hit but did not do damage, bounce back.
+				else if((flag & 1) != 0)//if hits but cancels damage, bounce back
 				{
 					this.motionX *= -0.1D;
 					this.motionY *= -0.1D;
@@ -380,7 +384,7 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 			}
 			boolean flag = false;
 			if(!this.isDead)
-			{	//no entity hit or hit cancelled, check if hits any blocks
+			{	//if no entity were reported hit, check whether any blocks are hit
 				currPos = new Vec3(this.posX, this.posY, this.posZ);
 				nextPos = new Vec3(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);	
 				MOP = this.worldObj.rayTraceBlocks(currPos, nextPos, false, true, false);
@@ -412,10 +416,10 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 					}
 				}
 			}
-			if(this.isCritical)
+			if(this.isCritical && this.typePartical != null)
 			{
 				for(i = 0; i < 4; ++i)
-					this.worldObj.spawnParticle(EnumParticleTypes.CRIT, this.posX + this.motionX * (double)i / 4.0D, this.posY + this.motionY * (double)i / 4.0D, this.posZ + this.motionZ * (double)i / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ, new int[0]);
+					this.worldObj.spawnParticle(typePartical, this.posX + this.motionX * (double)i / 4.0D, this.posY + this.motionY * (double)i / 4.0D, this.posZ + this.motionZ * (double)i / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ, new int[0]);
 			}
 			this.posX += this.motionX;
 			this.posY += this.motionY;
@@ -458,10 +462,10 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 		}
 	}
 
-	//this function should return 0 for entity not hit, 1 for hit but did not cause damage, 2 for not hit but caused damage, and 3 for hit and caused damage.
+	//this function should return 0 when canceling hit and damage, 1 when canceling damage only, 2 when canceling hit but causing damage, and 3 when canceling nothing.
 	protected abstract int onEntityHit(Entity entity, float damage);
 
-	//this function should return true for hit the block, and false for not hit the block.
+	//this function should return true when hitting, and false when canceling hit.
 	protected abstract boolean onBlockHit(BlockPos blockPos, Vec3 hitVec, EnumFacing sideHit);
 
 }

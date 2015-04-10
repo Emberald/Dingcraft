@@ -1,4 +1,4 @@
-package simon.dingcraft;
+package com.dingcraft.ding;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

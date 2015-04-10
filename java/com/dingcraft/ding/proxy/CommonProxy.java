@@ -1,8 +1,9 @@
-package simon.dingcraft.network;
+package com.dingcraft.ding.proxy;
 
-import simon.dingcraft.Dingcraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+
+import com.dingcraft.ding.Dingcraft;
 
 public class CommonProxy
 {

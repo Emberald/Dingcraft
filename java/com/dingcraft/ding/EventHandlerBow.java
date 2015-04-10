@@ -1,4 +1,4 @@
-package simon.dingcraft;
+package com.dingcraft.ding;
 
 import java.util.Random;
 
@@ -8,9 +8,11 @@ import net.minecraft.init.Items;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import simon.dingcraft.entity.EntityArrowFission;
 
-public class DingEventHandler
+import com.dingcraft.ding.entity.EntityArrowFission;
+import com.dingcraft.ding.entity.EntityArrowTorch;
+
+public class EventHandlerBow
 {	
 	private static Random Rnd = new Random();
 	@SubscribeEvent
@@ -30,7 +32,8 @@ public class DingEventHandler
 			if(charge > 2.0F)
 				charge = 2.0F;
 			World world = event.entityPlayer.worldObj;
-			EntityArrowFission arrow = new EntityArrowFission(world, event.entityPlayer, charge);
+//			EntityArrowFission arrow = new EntityArrowFission(world, event.entityPlayer, charge);
+			EntityArrowTorch arrow = new EntityArrowTorch(world, event.entityPlayer, charge);
 			if(charge == 2.0F)
 				arrow.isCritical = true;
 			int lvlPower = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, event.bow);

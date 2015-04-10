@@ -1,4 +1,4 @@
-package simon.dingcraft;
+package com.dingcraft.ding;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -10,13 +10,15 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import simon.dingcraft.block.BlockDing;
-import simon.dingcraft.entity.EntityArrowFission;
-import simon.dingcraft.entity.EntityArrowTorch;
-import simon.dingcraft.entity.EntityArrowVoid;
-import simon.dingcraft.item.ItemDing;
-import simon.dingcraft.item.ItemWandDing;
-import simon.dingcraft.network.CommonProxy;
+
+import com.dingcraft.ding.block.BlockDing;
+import com.dingcraft.ding.block.BlockPhoton;
+import com.dingcraft.ding.entity.EntityArrowFission;
+import com.dingcraft.ding.entity.EntityArrowTorch;
+import com.dingcraft.ding.entity.EntityArrowVoid;
+import com.dingcraft.ding.item.ItemDing;
+import com.dingcraft.ding.item.ItemWandDing;
+import com.dingcraft.ding.proxy.CommonProxy;
 
 @Mod(modid = Dingcraft.MODID, name = Dingcraft.MODNAME, version = Dingcraft.VERSION)
 public class Dingcraft
@@ -25,23 +27,26 @@ public class Dingcraft
 	public static final String MODNAME = "Dingcraft";
 	public static final String VERSION = "0.2.0";
 
-	@SidedProxy(clientSide = "simon.dingcraft.network.ClientProxy", serverSide = "simon.dingcraft.network.CommonProxy")
+	@SidedProxy(clientSide = "com.dingcraft.ding.proxy.ClientProxy", serverSide = "com.dingcraft.ding.proxy.CommonProxy")
 	public static CommonProxy proxy;
 
 	@Instance(Dingcraft.MODID)
 	public static Dingcraft instance;
 
 	public static BlockDing dingBlock = new BlockDing();
+	public static BlockPhoton photonBlock = new BlockPhoton();
+
 	public static ItemDing dingItem = new ItemDing();
 	public static ItemWandDing dingWand = new ItemWandDing();
 
-	public static DingEventHandler handler = new DingEventHandler();
+	public static EventHandlerBow handler = new EventHandlerBow();
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		//blocks
 		GameRegistry.registerBlock(Dingcraft.dingBlock, BlockDing.name);
+		GameRegistry.registerBlock(Dingcraft.photonBlock, BlockPhoton.name);
 		//items
 		GameRegistry.registerItem(Dingcraft.dingItem, ItemDing.name);
 		GameRegistry.registerItem(Dingcraft.dingWand, ItemWandDing.name);    	

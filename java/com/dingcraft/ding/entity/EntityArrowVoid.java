@@ -1,4 +1,4 @@
-package simon.dingcraft.entity;
+package com.dingcraft.ding.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,8 +9,9 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import simon.dingcraft.DamageSourceDing;
-import simon.dingcraft.Dingcraft;
+
+import com.dingcraft.ding.DamageSourceDing;
+import com.dingcraft.ding.Dingcraft;
 
 public class EntityArrowVoid extends EntityArrowGeneral
 {

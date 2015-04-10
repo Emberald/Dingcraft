@@ -1,4 +1,4 @@
-package simon.dingcraft.entity;
+package com.dingcraft.ding.entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
@@ -9,22 +9,25 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
+import com.dingcraft.ding.Dingcraft;
+
 public class EntityArrowTorch extends EntityArrowGeneral
 {
-	protected int airPosX = 0;
-	protected int airPosY = 0;
-	protected int airPosZ = 0;
-	
+//	protected int airPosX = 0;
+//	protected int airPosY = 0;
+//	protected int airPosZ = 0;
+	protected int ticksAirOnLight = 1;
+	private BlockPos blockPos;
 	
 	protected ResourceLocation getTexture()
 	{
@@ -49,6 +52,7 @@ public class EntityArrowTorch extends EntityArrowGeneral
 	public EntityArrowTorch(World worldIn, EntityLivingBase shooter, float charge)
 	{
 		super(worldIn, shooter, charge);
+		
 	}
 
 	protected int onEntityHit(Entity entity, float damage)
@@ -91,17 +95,34 @@ public class EntityArrowTorch extends EntityArrowGeneral
 		if(this.inWater)
 		{
 			EntityArrow arrow = new EntityArrow(this.worldObj, this.posX, this.posY, this.posZ);
-			float speed = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+//			float speed = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
 			arrow.shootingEntity = this.shooter;
 			arrow.motionX = this.motionX;
 			arrow.motionY = this.motionY;
 			arrow.motionZ = this.motionZ;
 			arrow.canBePickedUp = this.canBePickedUp;
-			if(!this.worldObj.isRemote)
+			if(!this.worldObj.isRemote && !this.isDead)
+			{
 				this.worldObj.spawnEntityInWorld(arrow);
+	            this.entityDropItem(new ItemStack(Blocks.torch, 1), 0.0F);
+			}
 			this.setDead();
 			return;
 		}
+		
+		if (blockPos != null)
+		{
+			this.worldObj.setBlockToAir(blockPos);
+		}
+		blockPos = new BlockPos(this.posX, this.posY, this.posZ);
+		IBlockState blockState = this.worldObj.getBlockState(blockPos);
+		Block block = blockState.getBlock();
+		if (this.posY < 256.0D && block.getMaterial() == Material.air)
+        {
+			blockState = Dingcraft.photonBlock.onBlockPlaced(null, null, null, 0, 0, 0, ticksAirOnLight, null);
+			this.worldObj.setBlockState(blockPos, blockState);
+        }
+		
 		float f = this.rand.nextFloat();
 		if(f < 0.2F)
 			this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + this.rand.nextDouble() * 0.2D, this.posY + this.rand.nextDouble() * 0.2D + 0.1D, this.posZ + this.rand.nextDouble() * 0.2D, 0.0D, 0.0D, 0.0D, new int[0]);

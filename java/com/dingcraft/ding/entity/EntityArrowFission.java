@@ -1,6 +1,5 @@
-package simon.dingcraft.entity;
+package com.dingcraft.ding.entity;
 
-import simon.dingcraft.Dingcraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;

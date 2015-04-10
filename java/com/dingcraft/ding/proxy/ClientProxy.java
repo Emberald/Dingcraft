@@ -1,4 +1,4 @@
-package simon.dingcraft.network;
+package com.dingcraft.ding.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -6,14 +6,16 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import simon.dingcraft.Dingcraft;
-import simon.dingcraft.block.BlockDing;
-import simon.dingcraft.entity.EntityArrowFission;
-import simon.dingcraft.entity.EntityArrowTorch;
-import simon.dingcraft.entity.EntityArrowVoid;
-import simon.dingcraft.item.ItemDing;
-import simon.dingcraft.item.ItemWandDing;
-import simon.dingcraft.renderer.RenderArrowGeneral;
+
+import com.dingcraft.ding.Dingcraft;
+import com.dingcraft.ding.block.BlockDing;
+import com.dingcraft.ding.block.BlockPhoton;
+import com.dingcraft.ding.entity.EntityArrowFission;
+import com.dingcraft.ding.entity.EntityArrowTorch;
+import com.dingcraft.ding.entity.EntityArrowVoid;
+import com.dingcraft.ding.item.ItemDing;
+import com.dingcraft.ding.item.ItemWandDing;
+import com.dingcraft.ding.renderer.RenderArrowGeneral;
 
 public class ClientProxy extends CommonProxy
 {
@@ -24,6 +26,7 @@ public class ClientProxy extends CommonProxy
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 		//blocks' items
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(Dingcraft.dingBlock), 0, new ModelResourceLocation(Dingcraft.MODID + ":" + BlockDing.name, "inventory"));
+//		renderItem.getItemModelMesher().register(Item.getItemFromBlock(Dingcraft.photonBlock), 0, new ModelResourceLocation(Dingcraft.MODID + ":" + BlockPhoton.name, "inventory"));
 		//items
 		renderItem.getItemModelMesher().register(Dingcraft.dingItem, 0, new ModelResourceLocation(Dingcraft.MODID + ":" + ItemDing.name, "inventory"));
 		renderItem.getItemModelMesher().register(Dingcraft.dingWand, 0, new ModelResourceLocation(Dingcraft.MODID + ":" + ItemWandDing.name, "inventory"));
