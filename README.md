@@ -1,6 +1,6 @@
 # Dingcraft
 ###Description
-This is the first minecraft mod after my friends and I have learnt Java. The purpose of creating this mod is to practice our programming skill and, most importantly, to have fun.
+This is the first minecraft mod after we have learnt Java. The purpose of making this mod is to practice to programming in Java and, most importantly, to have fun.
 ###Features
 * New Arrows
  + _Void arrow_ is enchanted with void energy which penetrates everything, including players in creative mode, triggered by level 2 flame enchantment. 
