@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.lwjgl.opengl.GL11;
 
-import com.dingcraft.ding.entity.EntityArrowGeneral;
+import com.dingcraft.ding.entity.EntityArrowBase;
 
 @SideOnly(Side.CLIENT)
 public class RenderArrowGeneral extends Render
@@ -52,7 +52,7 @@ public class RenderArrowGeneral extends Render
 		float f9 = (float)(10 + b0 * 10) / 32.0F;
 		float f10 = 0.05625F;
 		GlStateManager.enableRescaleNormal();
-		float f11 = (float)((EntityArrowGeneral)entity).arrowShake - partialTicks;
+		float f11 = (float)((EntityArrowBase)entity).arrowShake - partialTicks;
 
 		if (f11 > 0.0F)
 		{
@@ -97,7 +97,7 @@ public class RenderArrowGeneral extends Render
 
 	protected ResourceLocation getEntityTexture(Entity entity)
 	{
-		return ((EntityArrowGeneral)entity).arrowTextures;
+		return ((EntityArrowBase)entity).arrowTextures;
 	}
 
 }

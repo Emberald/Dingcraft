@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-public class EntityArrowFission extends EntityArrowGeneral
+public class EntityArrowFission extends EntityArrowBase
 {
 	protected int fissionCnt = 6;
 	
@@ -62,12 +62,12 @@ public class EntityArrowFission extends EntityArrowGeneral
 			EntityArrowFission arrow = new EntityArrowFission(this.worldObj, this.posX, this.posY, this.posZ);
 			float speed = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
 			arrow.shooter = this.shooter;
-			arrow.setThrowableHeading(this.motionX, this.motionY, this.motionZ, speed, 2.0F);
+			arrow.setThrowableHeading(this.motionX, this.motionY, this.motionZ, speed, 3.2F);
 			arrow.canBePickedUp = this.canBePickedUp;
 			arrow.setFissionCnt(this.fissionCnt);
 			arrow.isCritical = this.isCritical;
 			this.worldObj.spawnEntityInWorld(arrow);
-			this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, speed, 2.0F);
+			this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, speed, 3.2F);
 		}
 		super.onUpdate();
 	}
@@ -75,6 +75,11 @@ public class EntityArrowFission extends EntityArrowGeneral
 	public void setFissionCnt(int fissionCnt)
 	{
 		this.fissionCnt = fissionCnt;
+	}
+	
+	public int getFissionCnt()
+	{
+		return this.fissionCnt;
 	}
 	
 	protected int onEntityHit(Entity entity, float damage)

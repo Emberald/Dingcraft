@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import com.dingcraft.ding.DamageSourceDing;
 import com.dingcraft.ding.Dingcraft;
 
-public class EntityArrowVoid extends EntityArrowGeneral
+public class EntityArrowVoid extends EntityArrowBase
 {
 	protected ResourceLocation getTexture()
 	{
@@ -62,16 +62,13 @@ public class EntityArrowVoid extends EntityArrowGeneral
 		else
 			damagesource = DamageSourceDing.causeVoidDamage(this, this);
 		if(entityHit.attackEntityFrom(damagesource, damage))
-		{
-			entityHit.hurtResistantTime = 0;
 			return 3;
-		}
 		else
 			return 1;
 	}
 
 	protected boolean onBlockHit(BlockPos blockPos, Vec3 hitVec, EnumFacing sideHit)
 	{
-		return true;
+		return false;
 	}
 }

@@ -29,7 +29,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class EntityArrowGeneral extends Entity implements IProjectile
+public abstract class EntityArrowBase extends Entity implements IProjectile
 {
 	protected Entity shooter;
 	public int canBePickedUp;
@@ -57,14 +57,14 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 
 	protected abstract ResourceLocation getTexture();
 
-	public EntityArrowGeneral(World worldIn)
+	public EntityArrowBase(World worldIn)
 	{
 		super(worldIn);
 		this.renderDistanceWeight = 10.0D;
 		this.setSize(0.5F, 0.5F);
 	}
 
-	public EntityArrowGeneral(World worldIn, double x, double y, double z)
+	public EntityArrowBase(World worldIn, double x, double y, double z)
 	{
 		super(worldIn);
 		this.renderDistanceWeight = 10.0D;
@@ -72,7 +72,7 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 		this.setPosition(x, y, z);
 	}
 
-	public EntityArrowGeneral(World worldIn, EntityLivingBase shooter, EntityLivingBase target, float velocity, float inaccuracy)
+	public EntityArrowBase(World worldIn, EntityLivingBase shooter, EntityLivingBase target, float velocity, float inaccuracy)
 	{
 		super(worldIn);
 		this.renderDistanceWeight = 10.0D;
@@ -96,7 +96,7 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 		}
 	}
 
-	public EntityArrowGeneral(World worldIn, EntityLivingBase shooter, float charge)
+	public EntityArrowBase(World worldIn, EntityLivingBase shooter, float charge)
 	{
 		super(worldIn);
 		this.renderDistanceWeight = 10.0D;
@@ -462,10 +462,20 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 		}
 	}
 
-	//this function should return 0 when canceling hit and damage, 1 when canceling damage only, 2 when canceling hit but causing damage, and 3 when canceling nothing.
+	/**
+     * @return
+     *   0 when canceling hit and damage,
+     *   1 when canceling damage only, 
+     *   2 when canceling hit but causing damage, and 
+     *   3 when canceling nothing.
+     */
 	protected abstract int onEntityHit(Entity entity, float damage);
 
-	//this function should return true when hitting, and false when canceling hit.
+	/**
+	 * @return
+	 *   true when hitting, and
+	 *   false when canceling hit
+	 */
 	protected abstract boolean onBlockHit(BlockPos blockPos, Vec3 hitVec, EnumFacing sideHit);
 
 }
