@@ -384,7 +384,7 @@ public abstract class EntityArrowGeneral extends Entity implements IProjectile
 			}
 			boolean flag = false;
 			if(!this.isDead)
-			{	//if no entity were reported hit, check whether any blocks are hit
+			{	//if no entities were reported hit, check whether any blocks are hit
 				currPos = new Vec3(this.posX, this.posY, this.posZ);
 				nextPos = new Vec3(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);	
 				MOP = this.worldObj.rayTraceBlocks(currPos, nextPos, false, true, false);

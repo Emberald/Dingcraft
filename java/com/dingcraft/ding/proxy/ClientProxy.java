@@ -26,7 +26,7 @@ public class ClientProxy extends CommonProxy
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 		//blocks' items
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(Dingcraft.dingBlock), 0, new ModelResourceLocation(Dingcraft.MODID + ":" + BlockDing.name, "inventory"));
-//		renderItem.getItemModelMesher().register(Item.getItemFromBlock(Dingcraft.photonBlock), 0, new ModelResourceLocation(Dingcraft.MODID + ":" + BlockPhoton.name, "inventory"));
+//		renderItem.getItemModelMesher().register(Item.getItemFromBlock(Dingcraft.meteorBlock), 0, new ModelResourceLocation(Dingcraft.MODID + ":" + BlockMeteor.name, "inventory"));
 		//items
 		renderItem.getItemModelMesher().register(Dingcraft.dingItem, 0, new ModelResourceLocation(Dingcraft.MODID + ":" + ItemDing.name, "inventory"));
 		renderItem.getItemModelMesher().register(Dingcraft.dingWand, 0, new ModelResourceLocation(Dingcraft.MODID + ":" + ItemWandDing.name, "inventory"));

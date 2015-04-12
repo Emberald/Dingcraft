@@ -26,8 +26,7 @@ public class EntityArrowTorch extends EntityArrowGeneral
 //	protected int airPosX = 0;
 //	protected int airPosY = 0;
 //	protected int airPosZ = 0;
-	protected int ticksAirOnLight = 1;
-	private BlockPos blockPos;
+	BlockPos blockPhotonPos;
 	
 	protected ResourceLocation getTexture()
 	{
@@ -110,18 +109,25 @@ public class EntityArrowTorch extends EntityArrowGeneral
 			return;
 		}
 		
-		if (blockPos != null)
+		if(this.ticksInAir % 2 == 0)
 		{
-			this.worldObj.setBlockToAir(blockPos);
+			if(blockPhotonPos != null)
+			{
+				this.worldObj.setBlockToAir(blockPhotonPos);
+				blockPhotonPos = null;
+			}
+			if(!this.inGround)
+			{
+				blockPhotonPos = new BlockPos(this.posX + this.motionX / 2, this.posY + this.motionY / 2, this.posZ + this.motionZ / 2);
+				IBlockState blockState = this.worldObj.getBlockState(blockPhotonPos);
+				Block block = blockState.getBlock();
+				if (this.posY < 256.0D && block.getMaterial() == Material.air)
+		        {
+					blockState = Dingcraft.photonBlock.onBlockPlaced(null, null, null, 0, 0, 0, 1, null);
+					this.worldObj.setBlockState(blockPhotonPos, blockState);
+		        }
+			}
 		}
-		blockPos = new BlockPos(this.posX, this.posY, this.posZ);
-		IBlockState blockState = this.worldObj.getBlockState(blockPos);
-		Block block = blockState.getBlock();
-		if (this.posY < 256.0D && block.getMaterial() == Material.air)
-        {
-			blockState = Dingcraft.photonBlock.onBlockPlaced(null, null, null, 0, 0, 0, ticksAirOnLight, null);
-			this.worldObj.setBlockState(blockPos, blockState);
-        }
 		
 		float f = this.rand.nextFloat();
 		if(f < 0.2F)

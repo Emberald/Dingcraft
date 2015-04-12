@@ -1,7 +1,13 @@
 tile.dingBlock.name=Ding Block
+tile.meteorBlock.name=Meteorite
+
 item.dingItem.name=Ding Fragment
 item.dingWand.name=Ding's Magic Wand
-item.dingBow.name=Ding's Eternal Bow of Chaos
+
+item.skillOmnipunch.name=Omnipunch
+item.skillMeteorShower.name=Rain of Flame
+
+itemGroup.tabSkills=Skills
 
 death.attack.void=%1$s's existence was shattered
 death.attack.void.player=%1$s's existence was shattered by %2$s
