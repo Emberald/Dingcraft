@@ -76,7 +76,7 @@ public class EntityArrowTorch extends EntityArrowGeneral
 	{
 		BlockPos blockPosIn = blockPosHit.offset(sideHit);
 		Block blockIn = this.worldObj.getBlockState(blockPosIn).getBlock();
-		if(sideHit.equals(EnumFacing.DOWN) || blockIn.equals(Blocks.torch) || !blockIn.getMaterial().isReplaceable())
+		if(sideHit.equals(EnumFacing.DOWN) || blockIn.equals(Blocks.torch) || !blockIn.getMaterial().isReplaceable() || this.worldObj.isRemote)
 			return true;
 		if((sideHit.equals(EnumFacing.UP) && this.worldObj.getBlockState(blockPosHit).getBlock().canPlaceTorchOnTop(this.worldObj, blockPosHit))
 			|| (sideHit.getAxis().isHorizontal() && this.worldObj.isSideSolid(blockPosHit, sideHit, false)))
