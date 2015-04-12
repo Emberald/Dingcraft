@@ -80,7 +80,7 @@ public class EventHandlerBow
 				}
 				for(int i = 0; i < numArrowConsumed; i++)
 				{
-					if(event.entityPlayer.inventory.consumeInventoryItem(Items.arrow))
+					if(!event.entityPlayer.inventory.consumeInventoryItem(Items.arrow))
 					{
 						arrow.canBePickedUp = 2;
 						break;
