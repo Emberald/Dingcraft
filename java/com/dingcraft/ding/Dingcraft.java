@@ -46,7 +46,7 @@ public class Dingcraft
 	{
 		//blocks
 		GameRegistry.registerBlock(Dingcraft.dingBlock, BlockDing.name);
-		GameRegistry.registerBlock(Dingcraft.photonBlock, BlockPhoton.name);
+//		GameRegistry.registerBlock(Dingcraft.photonBlock, BlockPhoton.name);
 		//items
 		GameRegistry.registerItem(Dingcraft.dingItem, ItemDing.name);
 		GameRegistry.registerItem(Dingcraft.dingWand, ItemWandDing.name);    	
