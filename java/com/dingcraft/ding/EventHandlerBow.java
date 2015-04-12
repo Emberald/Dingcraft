@@ -4,13 +4,16 @@ import java.util.Random;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import com.dingcraft.ding.entity.EntityArrowBase;
 import com.dingcraft.ding.entity.EntityArrowFission;
 import com.dingcraft.ding.entity.EntityArrowTorch;
+import com.dingcraft.ding.entity.EntityArrowVoid;
 
 public class EventHandlerBow
 {	
@@ -19,7 +22,7 @@ public class EventHandlerBow
 	public void ArrowFire(ArrowLooseEvent event)
 	{
 		int lvlFlame = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, event.bow);
-		if(lvlFlame == 2)
+		if(lvlFlame >= 2 && lvlFlame <= 4)
 		{
 			event.setCanceled(true);
 			boolean flag = event.entityPlayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, event.bow) > 0;
@@ -32,12 +35,33 @@ public class EventHandlerBow
 			if(charge > 2.0F)
 				charge = 2.0F;
 			World world = event.entityPlayer.worldObj;
-//			EntityArrowFission arrow = new EntityArrowFission(world, event.entityPlayer, charge);
-			EntityArrowTorch arrow = new EntityArrowTorch(world, event.entityPlayer, charge);
-			if(charge == 2.0F)
-				arrow.isCritical = true;
+
+			EntityArrowBase arrow;
 			int lvlPower = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, event.bow);
 			int lvlPunch = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, event.bow);
+			switch(lvlFlame)
+			{
+				case 2:
+					arrow = new EntityArrowVoid(world, event.entityPlayer, charge);
+					lvlPower *= 0.4;
+					lvlPunch *= 0.5;
+					flag = true;
+					event.entityPlayer.inventory.consumeInventoryItem(Items.arrow);					
+					break;
+				case 3:
+					arrow = new EntityArrowFission(world, event.entityPlayer, charge);
+					((EntityArrowFission)arrow).setFissionCnt(lvlPower + 1);
+					lvlPower *= 0.5;
+					lvlPunch = 0;
+					break;
+				case 4:
+				default:
+					arrow = new EntityArrowTorch(world, event.entityPlayer, charge);
+					break;
+			}
+			
+			if(charge == 2.0F)
+				arrow.isCritical = true;
 			if(lvlPower > 0)
                 arrow.setDamage(arrow.getDamage() + (double)lvlPower * 0.5D + 0.5D);
 			if(lvlPunch > 0)
@@ -47,7 +71,22 @@ public class EventHandlerBow
 			if(flag)
 				arrow.canBePickedUp = 2;
 			else
-				event.entityPlayer.inventory.consumeInventoryItem(Items.arrow);
+			{
+				int numArrowConsumed = 1;
+				//TODO more accurate number of fission arrows related to number of player's arrows in inventory
+				if(arrow instanceof EntityArrowFission)
+				{
+					numArrowConsumed = (int)Math.pow(2, ((EntityArrowFission)arrow).getFissionCnt());
+				}
+				for(int i = 0; i < numArrowConsumed; i++)
+				{
+					if(event.entityPlayer.inventory.consumeInventoryItem(Items.arrow))
+					{
+						arrow.canBePickedUp = 2;
+						break;
+					}
+				}
+			}
 			if(!world.isRemote)
 				world.spawnEntityInWorld(arrow);
 		}
