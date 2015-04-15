@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,6 +22,7 @@ import com.dingcraft.ding.block.BlockPhoton;
 import com.dingcraft.ding.entity.EntityArrowFission;
 import com.dingcraft.ding.entity.EntityArrowTorch;
 import com.dingcraft.ding.entity.EntityArrowVoid;
+import com.dingcraft.ding.entitylighting.EntityLighting;
 import com.dingcraft.ding.item.ItemDing;
 import com.dingcraft.ding.item.ItemWandDing;
 import com.dingcraft.ding.item.skill.SkillOmnipunch;
@@ -86,6 +88,12 @@ public class Dingcraft
 	public void init(FMLInitializationEvent event)
 	{
 		proxy.register();
+	}
+	
+	@EventHandler
+	public void stop(FMLServerStoppingEvent event)
+	{
+		this.entityLighting.stop();
 	}
 	
 }

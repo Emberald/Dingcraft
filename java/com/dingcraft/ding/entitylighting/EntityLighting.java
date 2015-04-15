@@ -1,17 +1,15 @@
-package com.dingcraft.ding;
+package com.dingcraft.ding.entitylighting;
 
 import java.util.List;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 
 import com.dingcraft.ding.entity.EntityArrowTorch;
 import com.google.common.collect.Lists;
@@ -19,14 +17,14 @@ import com.google.common.collect.Lists;
 public class EntityLighting
 {
 	protected List trackedEntity;
-	protected int[] lightUpdateBlockList;
+	protected int[] lightUpdateBlockQueue;
 	
 	private final EnumFacing[] enumFacingAry = EnumFacing.values();
 	private final int facingCnt = enumFacingAry.length;
 	
 	public EntityLighting()
 	{
-		this.lightUpdateBlockList = new int[32768];
+		this.lightUpdateBlockQueue = new int[32768];
 		this.trackedEntity = Lists.newArrayList();
 	}
 	
@@ -34,46 +32,60 @@ public class EntityLighting
 	public void onEntityAdded(EntityJoinWorldEvent event)
 	{
 		//Only for testing. Entity registry will be implemented later.
-		
 
 		if(event.entity instanceof EntityArrowTorch)
 		{
-			trackedEntity.add(new LightTrackedEntity(event.entity, 14));
+			LightSourceArrowTorch arrow = new LightSourceArrowTorch((EntityArrowTorch)event.entity);
+			trackedEntity.add(arrow);
+			this.checkLight(event.entity.worldObj, arrow.getBlockPos());
 			System.out.println("Entity added.");
 		}
 	}
 	
 	@SubscribeEvent
-	public void tick(ClientTickEvent event)
+	public void tick(ServerTickEvent event)
 	{
-		if(event.phase == TickEvent.Phase.END) return;
+		if(event.phase == TickEvent.Phase.START) return;
 		int i = 0;
-		LightTrackedEntity lightEntity = null;
-		//remove dead entities
+		LightSourceEntity lightEntity = null;
 		while(i < trackedEntity.size())
 		{
-			lightEntity = (LightTrackedEntity)trackedEntity.get(i);
-			if(lightEntity.entity.isDead)
+			lightEntity = (LightSourceEntity)this.trackedEntity.get(i);
+			if(lightEntity.shouldBeRemoved())
 			{
 				trackedEntity.remove(i);
-				this.checkLight(lightEntity.entity.worldObj, lightEntity.lightBlockPos);
+				this.checkLight(lightEntity.entity.worldObj, lightEntity.getBlockPos());
 			}
 			else
 				i++;
 		}
-		//update lighted blocks
-		int size = trackedEntity.size();
+		int size = this.trackedEntity.size();
+		World world;
 		for(i = 0; i < size; i++)
 		{
-			lightEntity = (LightTrackedEntity)trackedEntity.get(i);
-			BlockPos newPos = lightEntity.getCurrBlockPos();
-			if(!newPos.equals(lightEntity.lightBlockPos))
+			lightEntity = (LightSourceEntity)this.trackedEntity.get(i);
+			world = lightEntity.entity.worldObj;
+			BlockPos blockPosOld = lightEntity.hasMoved();
+			if(blockPosOld != null)
 			{
-				BlockPos oldPos = lightEntity.lightBlockPos;
-				lightEntity.lightBlockPos = newPos;
-				this.checkLight(lightEntity.entity.worldObj, lightEntity.lightBlockPos);
-				this.checkLight(lightEntity.entity.worldObj, oldPos);
+				this.checkLight(world, lightEntity.getBlockPos());
+				this.checkLight(world, blockPosOld);
 			}
+			else if(world.getLightFor(EnumSkyBlock.BLOCK, lightEntity.getBlockPos()) < lightEntity.getLightLevel())
+				this.checkLight(world, lightEntity.getBlockPos());
+		}
+	}
+	
+	public void stop()
+	{
+		//empty the list and cancel all lighting
+		BlockPos pos;
+		LightSourceEntity entry;
+		while(!this.trackedEntity.isEmpty())
+		{
+			entry =  (LightSourceEntity)this.trackedEntity.get(0);
+			this.trackedEntity.remove(0);
+			this.checkLight(entry.entity.worldObj, entry.getBlockPos());
 		}
 	}
 	
@@ -81,8 +93,14 @@ public class EntityLighting
 	{
 		int lightLvlCurr = worldIn.getLightFor(EnumSkyBlock.BLOCK, pos);
 		int lightLvlNew = 0;
+		int l;
+		BlockPos nextPos;
 		for(int i = 0; i < facingCnt; i++)
+		{
+			nextPos = pos.offset(enumFacingAry[i]);
+			l = worldIn.getLightFor(EnumSkyBlock.BLOCK, nextPos);
 			lightLvlNew = Math.max(lightLvlNew, worldIn.getLightFor(EnumSkyBlock.BLOCK, pos.offset(enumFacingAry[i])));
+		}
 		lightLvlNew -= Math.max(1, worldIn.getBlockState(pos).getBlock().getLightOpacity());
 		lightLvlNew = Math.max(lightLvlNew, this.getBlockLightEmitLvl(worldIn, pos));
 		if(lightLvlNew != lightLvlCurr)
@@ -96,20 +114,24 @@ public class EntityLighting
 		
 	private boolean inRange(BlockPos pos, BlockPos reference)
 	{
-		return Math.abs(pos.getX() - reference.getX()) + Math.abs(pos.getY() - reference.getY()) + Math.abs(pos.getZ() - reference.getZ()) < 16;
+		return Math.abs(pos.getX() - reference.getX()) + Math.abs(pos.getY() - reference.getY()) + Math.abs(pos.getZ() - reference.getZ()) < 20;
 	}
 	
-	private int getBlockLightEmitLvl(World worldIn, BlockPos pos)
+	public int getBlockLightEmitLvl(World worldIn, BlockPos pos)
 	{
 		int size = trackedEntity.size();
-		LightTrackedEntity lightEntity;
+		LightSourceEntity entry;
+		int lightLvl = 0;
 		for(int i = 0; i < size; i++)
 		{
-			lightEntity = (LightTrackedEntity)trackedEntity.get(i);
-			if(lightEntity.lightBlockPos.equals(pos) && lightEntity.entity.worldObj == worldIn)
-				return lightEntity.lightLevel;
+			entry = (LightSourceEntity)trackedEntity.get(i);
+			if(entry.getBlockPos().equals(pos) && entry.entity.worldObj == worldIn)
+			{
+				lightLvl = entry.getLightLevel();
+				break;
+			}
 		}
-		return worldIn.getBlockState(pos).getBlock().getLightValue();
+		return Math.max(lightLvl, worldIn.getBlockState(pos).getBlock().getLightValue());
 	}
 	
 	private int compressBlockPos(BlockPos pos, BlockPos reference)
@@ -128,44 +150,36 @@ public class EntityLighting
 		return reference.add(x, y, z);
 	}
 	
-	private void checkLight(World world, BlockPos pos)
+	public void checkLight(World world, BlockPos pos)
 	{
 		BlockPos blockPosCurr;
 		
 		int listCurr = 0;
 		int listEnd = 0;
-		int i;
+		int i, j;
+		int compressedBlockPos;
 		
-		this.lightUpdateBlockList[listEnd++] = this.compressBlockPos(pos, pos);
+		this.lightUpdateBlockQueue[listEnd++] = this.compressBlockPos(pos, pos);
 		while(listCurr < listEnd)
 		{
-			blockPosCurr = this.decompressBlockPos(this.lightUpdateBlockList[listCurr++], pos);
+			blockPosCurr = this.decompressBlockPos(this.lightUpdateBlockQueue[listCurr++], pos);
 			if(this.inRange(blockPosCurr, pos) && this.checkNeighborLight(world, blockPosCurr))
 			{
 				for(i = 0; i < facingCnt; i++)
-						this.lightUpdateBlockList[listEnd++] = this.compressBlockPos(blockPosCurr.offset(enumFacingAry[i]), pos);
+				{
+					compressedBlockPos = this.compressBlockPos(blockPosCurr.offset(enumFacingAry[i]), pos);
+					for(j = listCurr; j < listEnd; j++)
+						if(this.lightUpdateBlockQueue[j] == compressedBlockPos) break;
+					if(j == listEnd)
+						this.lightUpdateBlockQueue[listEnd++] = compressedBlockPos;
+				}
 			}
 			if(listEnd > 30000)break;
 		}
+//		if(listEnd < 100)
+			System.out.println(listEnd);
+		
 //		System.out.printf("list size = %d\n", listEnd);
 	}
 	
-	protected class LightTrackedEntity
-	{
-		public Entity entity;
-		public BlockPos lightBlockPos;
-		public int lightLevel;
-		
-		public LightTrackedEntity(Entity entity, int lightLevel)
-		{
-			this.entity = entity;
-			this.lightBlockPos = new BlockPos(MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posY), MathHelper.floor_double(entity.posZ));
-			this.lightLevel = lightLevel & 15;
-		}
-		
-		public BlockPos getCurrBlockPos()
-		{
-			return new BlockPos(MathHelper.floor_double(this.entity.posX), MathHelper.floor_double(this.entity.posY), MathHelper.floor_double(this.entity.posZ));
-		}
-	}
 }

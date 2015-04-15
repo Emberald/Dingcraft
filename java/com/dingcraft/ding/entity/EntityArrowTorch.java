@@ -73,10 +73,10 @@ public class EntityArrowTorch extends EntityArrowBase
 		Block blockIn = this.worldObj.getBlockState(blockPosIn).getBlock();
 		if(!this.worldObj.isRemote)
 		{
-			if(!(sideHit.equals(EnumFacing.DOWN) || blockIn.equals(Blocks.torch) || !blockIn.getMaterial().isReplaceable()))
+			if(!sideHit.equals(EnumFacing.DOWN) && !blockIn.equals(Blocks.torch) && blockIn.getMaterial().isReplaceable())
 			{
 				if((sideHit.equals(EnumFacing.UP) && this.worldObj.getBlockState(blockPosHit).getBlock().canPlaceTorchOnTop(this.worldObj, blockPosHit))
-				|| (sideHit.getAxis().isHorizontal() && this.worldObj.isSideSolid(blockPosHit, sideHit, false)))
+						|| (sideHit.getAxis().isHorizontal() && this.worldObj.isSideSolid(blockPosHit, sideHit, false)))
 				{
 					IBlockState blockState1 = ((BlockTorch)Blocks.torch).onBlockPlaced(this.worldObj, blockPosIn, sideHit, (float)hitVec.xCoord, (float)hitVec.yCoord, (float)hitVec.zCoord, 0, (EntityLivingBase)null);
 					this.worldObj.setBlockState(blockPosIn, blockState1, 3);
@@ -111,8 +111,8 @@ public class EntityArrowTorch extends EntityArrowBase
 			}
 			this.setDead();
 		}
-		else if(!this.inGround)
-		{
+//		else if(!this.inGround)
+//		{
 //			BlockPos posBlockToLight = new BlockPos(this.posX, this.posY, this.posZ);
 //			IBlockState blockState = this.worldObj.getBlockState(posBlockToLight);
 //			Block block = blockState.getBlock();
@@ -122,6 +122,10 @@ public class EntityArrowTorch extends EntityArrowBase
 //				this.worldObj.setBlockState(posBlockToLight, blockState);
 //			}
 
+//		}
+		
+		if(!this.isDead)
+		{
 			float f = this.rand.nextFloat();
 			if(f < 0.2F)
 				this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + this.rand.nextDouble() * 0.2D, this.posY + this.rand.nextDouble() * 0.2D + 0.1D, this.posZ + this.rand.nextDouble() * 0.2D, 0.0D, 0.0D, 0.0D, new int[0]);
