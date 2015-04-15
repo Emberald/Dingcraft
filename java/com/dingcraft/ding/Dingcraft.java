@@ -21,7 +21,6 @@ import com.dingcraft.ding.block.BlockPhoton;
 import com.dingcraft.ding.entity.EntityArrowFission;
 import com.dingcraft.ding.entity.EntityArrowTorch;
 import com.dingcraft.ding.entity.EntityArrowVoid;
-import com.dingcraft.ding.entity.EntityOmnipunch;
 import com.dingcraft.ding.item.ItemDing;
 import com.dingcraft.ding.item.ItemWandDing;
 import com.dingcraft.ding.item.skill.SkillOmnipunch;
@@ -49,6 +48,7 @@ public class Dingcraft
 	public static SkillOmnipunch omnipunch = new SkillOmnipunch();
 
 	public static EventHandlerBow handler = new EventHandlerBow();
+	public static EntityLighting entityLighting = new EntityLighting();
 
 	public static CreativeTabs tabSkills = new CreativeTabs("tabSkills") {
 	    @SideOnly(Side.CLIENT)

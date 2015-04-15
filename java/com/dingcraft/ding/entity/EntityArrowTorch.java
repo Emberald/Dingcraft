@@ -2,7 +2,6 @@ package com.dingcraft.ding.entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,18 +15,14 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-
-import com.dingcraft.ding.Dingcraft;
 
 public class EntityArrowTorch extends EntityArrowBase
 {
-//	protected int airPosX = 0;
-//	protected int airPosY = 0;
-//	protected int airPosZ = 0;
-	
 	protected ResourceLocation getTexture()
 	{
 		return new ResourceLocation("textures/entity/arrow.png");
@@ -53,7 +48,7 @@ public class EntityArrowTorch extends EntityArrowBase
 		super(worldIn, shooter, charge);
 		
 	}
-
+		
 	protected int onEntityHit(Entity entity, float damage)
 	{
 		if(entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.disableDamage)
@@ -89,23 +84,21 @@ public class EntityArrowTorch extends EntityArrowBase
 				}
 			}
 			
-			if(!this.isDead)
-			{
-				this.entityDropItem(new ItemStack(Blocks.torch, 1), 0.0F);				
-			}
+//			if(!this.isDead)
+//			{
+//				this.entityDropItem(new ItemStack(Blocks.torch, 1), 0.0F);				
+//			}
 		}
 		
 		return true;
 	}
-	
+		
 	public void onUpdate()
 	{
 		super.onUpdate();
-
 		if(this.inWater)
 		{
 			EntityArrow arrow = new EntityArrow(this.worldObj, this.posX, this.posY, this.posZ);
-//			float speed = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
 			arrow.shootingEntity = this.shooter;
 			arrow.motionX = this.motionX;
 			arrow.motionY = this.motionY;
@@ -120,14 +113,14 @@ public class EntityArrowTorch extends EntityArrowBase
 		}
 		else if(!this.inGround)
 		{
-			BlockPos posBlockToLight = new BlockPos(this.posX, this.posY, this.posZ);
-			IBlockState blockState = this.worldObj.getBlockState(posBlockToLight);
-			Block block = blockState.getBlock();
-			if (this.posY < 256.0D && block.getMaterial() == Material.air)
-	        {
-				blockState = Dingcraft.photonBlock.onBlockPlaced(null, null, null, 0, 0, 0, 0, null);
-				this.worldObj.setBlockState(posBlockToLight, blockState);
-			}
+//			BlockPos posBlockToLight = new BlockPos(this.posX, this.posY, this.posZ);
+//			IBlockState blockState = this.worldObj.getBlockState(posBlockToLight);
+//			Block block = blockState.getBlock();
+//			if (this.posY < 256.0D && block.getMaterial() == Material.air)
+//	        {
+//				blockState = Dingcraft.photonBlock.onBlockPlaced(null, null, null, 0, 0, 0, 0, null);
+//				this.worldObj.setBlockState(posBlockToLight, blockState);
+//			}
 
 			float f = this.rand.nextFloat();
 			if(f < 0.2F)
@@ -136,5 +129,4 @@ public class EntityArrowTorch extends EntityArrowBase
 				this.worldObj.spawnParticle(EnumParticleTypes.FLAME, this.posX + this.rand.nextDouble() * 0.2D, this.posY + this.rand.nextDouble() * 0.2D, this.posZ + this.rand.nextDouble() * 0.2D, 0.0D, 0.01D, 0.0D, new int[0]);
 		}
 	}
-	
 }
