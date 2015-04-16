@@ -3,8 +3,16 @@ package com.dingcraft.ding.entitylighting;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
 
+/**
+ * This class is responsible for keeping track of an entity and updating lighting.</br>
+ * <b>NEVER</b> override methods defined here.
+ * 
+ * @author pyy
+ *
+ */
 public abstract class LightSourceEntity
 {
+	
 	public final Entity entity;
 	private BlockPos lightBlockPos;
 	
@@ -20,8 +28,8 @@ public abstract class LightSourceEntity
 	}
 	
 	/**
-	 * If the entity has moved, this method sets the light source block position to the new position,
-	 * and returns the old position; otherwise this method returns null.
+	 * This method will update the current light source block of the entity.
+	 * @return Old block position if the entity has moved, and null otherwise.
 	 */
 	public BlockPos hasMoved()
 	{

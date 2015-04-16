@@ -46,7 +46,6 @@ public class EntityArrowTorch extends EntityArrowBase
 	public EntityArrowTorch(World worldIn, EntityLivingBase shooter, float charge)
 	{
 		super(worldIn, shooter, charge);
-		
 	}
 		
 	protected int onEntityHit(Entity entity, float damage)
