@@ -34,7 +34,7 @@ public abstract class LightSourceEntity
 	}
 		
 	/**
-	 * This method is called at the beginning of a light update, and before entity's <i>onUpdate</i> event is triggered.</br>
+	 * This method is called at the beginning of a light update, and after entity's <i>onUpdate</i> event is triggered.</br>
 	 * Use this method to update some properties of the entity(e.g. light level),
 	 * and to determine whether the entity should be removed.</br>
 	 * <b>DO NOT</b> update lighting in this method; this will be done later by <i>EntityLighting</i> class.

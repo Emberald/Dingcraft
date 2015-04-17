@@ -15,6 +15,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -85,6 +86,8 @@ public class EntityLighting
 	@SubscribeEvent
 	public void tick(TickEvent.ClientTickEvent event)
 	{
+		if(event.phase == Phase.START || this.mcInstance.theWorld == null) return;
+		
 		int i = 0;
 		LightSourceEntity lightEntity = null;
 		
