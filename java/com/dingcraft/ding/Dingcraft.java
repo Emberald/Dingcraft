@@ -69,7 +69,7 @@ public class Dingcraft
 //		GameRegistry.registerBlock(Dingcraft.meteorBlock, BlockMeteor.name);
 		//items
 		GameRegistry.registerItem(Dingcraft.dingItem, ItemDing.name);
-		GameRegistry.registerItem(Dingcraft.dingWand, ItemWandDing.name);    	
+		GameRegistry.registerItem(Dingcraft.dingWand, ItemWandDing.name);
 //		GameRegistry.registerItem(Dingcraft.omnipunch, SkillOmnipunch.name);    	
 		//entity
 		EntityRegistry.registerModEntity(EntityArrowFission.class, "FissionArrow", 1, Dingcraft.instance, 64, 10, true);

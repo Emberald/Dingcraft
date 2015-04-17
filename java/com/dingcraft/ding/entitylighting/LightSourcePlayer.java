@@ -1,10 +1,8 @@
 package com.dingcraft.ding.entitylighting;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
 
 public class LightSourcePlayer extends LightSourceEntity {
 
@@ -17,13 +15,7 @@ public class LightSourcePlayer extends LightSourceEntity {
 	{
 		ItemStack itemStack = ((EntityPlayer)this.entity).getHeldItem();
 		if(itemStack != null)
-		{
-			Block block = Block.getBlockFromItem(itemStack.getItem());
-			if(block != null)
-				this.lightLevel = MathHelper.floor_float(block.getLightValue() * 0.75F);
-			else
-				this.lightLevel = 0;
-		}
+			this.lightLevel = LightSourceItem.getLightFromItem(itemStack.getItem());
 		else
 			this.lightLevel = 0;
 		return this.entity.isDead;
@@ -41,4 +33,5 @@ public class LightSourcePlayer extends LightSourceEntity {
 		else
 			return null;
 	}
+
 }

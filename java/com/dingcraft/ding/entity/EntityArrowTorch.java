@@ -107,19 +107,7 @@ public class EntityArrowTorch extends EntityArrowBase
 			}
 			this.setDead();
 		}
-//		else if(!this.inGround)
-//		{
-//			BlockPos posBlockToLight = new BlockPos(this.posX, this.posY, this.posZ);
-//			IBlockState blockState = this.worldObj.getBlockState(posBlockToLight);
-//			Block block = blockState.getBlock();
-//			if (this.posY < 256.0D && block.getMaterial() == Material.air)
-//	        {
-//				blockState = Dingcraft.photonBlock.onBlockPlaced(null, null, null, 0, 0, 0, 0, null);
-//				this.worldObj.setBlockState(posBlockToLight, blockState);
-//			}
 
-//		}
-		
 		if(!this.isDead)
 		{
 			float f = this.rand.nextFloat();

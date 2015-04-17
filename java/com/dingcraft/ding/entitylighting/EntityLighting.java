@@ -6,6 +6,8 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -34,7 +36,7 @@ public class EntityLighting
 		this.mcInstance = FMLClientHandler.instance().getClient();
 		this.trackedEntities = new ArrayList<LightSourceEntity>();
 		this.lightUpdateBlockFlag = new int[1024];
-		this.lightUpdateBlockQueue = new short[8192];
+		this.lightUpdateBlockQueue = new short[32768];
 	}
 	
 	/**
@@ -53,7 +55,7 @@ public class EntityLighting
 	
 	/**
 	 * The interface to remove an entity.</br>
-	 * Note that returning false in method <i>onUpdate</i> can also remove an entity.
+	 * Note that returning true in method <i>onUpdate</i> can also remove an entity.
 	 * @param entry The light source entity to be removed.
 	 * @return True if successfully removed, and false if the entry does not exist.
 	 */
@@ -80,6 +82,11 @@ public class EntityLighting
 				LightSourcePlayer player = new LightSourcePlayer((EntityPlayer)event.entity);
 				this.addEntity(player);
 			}
+			else if(event.entity instanceof EntityItem)
+			{
+				LightSourceItem item = new LightSourceItem((EntityItem)event.entity);
+				this.addEntity(item);
+			}
 		}
 	}
 	
@@ -95,7 +102,9 @@ public class EntityLighting
 		while(i < this.trackedEntities.size())
 		{
 			lightEntity = this.trackedEntities.get(i);
-			if(lightEntity.onUpdate())
+			if(lightEntity.entity.worldObj != this.mcInstance.theWorld)
+				this.trackedEntities.remove(i);
+			else if(lightEntity.onUpdate())
 			{
 				this.trackedEntities.remove(i);
 				this.checkLight(lightEntity.getBlockPos());
@@ -104,7 +113,7 @@ public class EntityLighting
 				i++;
 		}
 		int size;
-		//add burning entities
+		//add entities
 		if(this.mcInstance.theWorld != null)
 		{
 			List<Entity> entityList = this.mcInstance.theWorld.loadedEntityList;
@@ -122,7 +131,21 @@ public class EntityLighting
 					if(j == size)
 					{
 						LightSourceBurningCreature entry = new LightSourceBurningCreature((EntityLivingBase)entity);
-						this.trackedEntities.add(entry);
+						this.addEntity(entry);
+					}
+				}
+				else if(entity instanceof EntityItemFrame)
+				{
+					int light = LightSourceItemFrame.getLightFromItemFrame((EntityItemFrame)entity);
+					if(light != 0)
+					{
+						for(j = 0; j < size; j++)
+							if(this.trackedEntities.get(j).entity == entity) break;
+						if(j == size)
+						{
+							LightSourceItemFrame itemFrame = new LightSourceItemFrame((EntityItemFrame)entity, light);
+							this.addEntity(itemFrame);
+						}
 					}
 				}
 			}
@@ -149,10 +172,7 @@ public class EntityLighting
 	public void unload(WorldEvent.Unload event)
 	{
 		if(event.world == this.mcInstance.theWorld)
-		{
 			this.trackedEntities.clear();
-			System.out.println("Entity list cleared.");
-		}
 	}
 	
 	private void checkLight(BlockPos pos)

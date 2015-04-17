@@ -1,7 +1,6 @@
 package com.dingcraft.ding.entitylighting;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 
 public class LightSourceBurningCreature extends LightSourceEntity {
