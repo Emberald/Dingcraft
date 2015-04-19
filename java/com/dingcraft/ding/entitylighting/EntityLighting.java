@@ -104,19 +104,22 @@ public class EntityLighting
 		LightSourceEntity lightEntity = null;		
 		
 		//remove entities
-		Iterator<LightSourceEntity> iteratorLightEntity = this.trackedEntities.iterator();
-		while(iteratorLightEntity.hasNext())
+		int i = 0;
+		while(i < this.trackedEntities.size())
 		{
-			lightEntity = iteratorLightEntity.next();
+			lightEntity = this.trackedEntities.get(i);
 			if(lightEntity.entity.worldObj != this.mcInstance.theWorld)
-				iteratorLightEntity.remove();
+				this.trackedEntities.remove(i);
 			else if(lightEntity.onUpdate())
 			{
-				iteratorLightEntity.remove();
+				this.trackedEntities.remove(i);
 				this.checkLight(lightEntity.getBlockPos());
 			}
+			else
+				i++;
 		}
 		int size;
+		int sizeE;
 		
 		//add entities
 		if(this.mcInstance.theWorld != null)
@@ -128,10 +131,10 @@ public class EntityLighting
 				entity = iteratorEntity.next();
 				if(entity instanceof EntityLivingBase && entity.isBurning())
 				{
-					iteratorLightEntity = this.trackedEntities.iterator();
-					while(iteratorLightEntity.hasNext())
-						if(iteratorLightEntity.next().entity == entity) break;
-					if(!iteratorLightEntity.hasNext())
+					size = this.trackedEntities.size();
+					for(i = 0; i < size; i++)
+						if(this.trackedEntities.get(i).entity == entity) break;
+					if(i == size)
 					{
 						LightSourceBurningCreature entry = new LightSourceBurningCreature((EntityLivingBase)entity);
 						this.addEntity(entry);
@@ -142,10 +145,10 @@ public class EntityLighting
 					int light = LightSourceItemFrame.getLightFromItemFrame((EntityItemFrame)entity);
 					if(light != 0)
 					{
-						iteratorLightEntity = this.trackedEntities.iterator();
-						while(iteratorLightEntity.hasNext())
-							if(iteratorLightEntity.next().entity == entity) break;
-						if(!iteratorLightEntity.hasNext())
+						size = this.trackedEntities.size();
+						for(i = 0; i < size; i++)
+							if(this.trackedEntities.get(i).entity == entity) break;
+						if(i == size)
 						{
 							LightSourceItemFrame itemFrame = new LightSourceItemFrame((EntityItemFrame)entity, light);
 							this.addEntity(itemFrame);
@@ -154,20 +157,20 @@ public class EntityLighting
 				}
 				else if(entity instanceof EntityArrow && entity.isBurning())
 				{
-					iteratorLightEntity = this.trackedEntities.iterator();
-					while(iteratorLightEntity.hasNext())
-						if(iteratorLightEntity.next().entity == entity) break;
-					if(!iteratorLightEntity.hasNext())
+					size = this.trackedEntities.size();
+					for(i = 0; i < size; i++)
+						if(this.trackedEntities.get(i).entity == entity) break;
+					if(i == size)
 						this.addEntity(new LightSourceBurningItem(entity, 10));
 				}
 			}
 		}
 		
 		//relight
-		iteratorLightEntity = this.trackedEntities.iterator();
-		while(iteratorLightEntity.hasNext())
+		size = this.trackedEntities.size();
+		for(i = 0; i < size; i++)
 		{
-			lightEntity = iteratorLightEntity.next();
+			lightEntity = this.trackedEntities.get(i);
 			BlockPos blockPosOld = lightEntity.hasMoved();
 			if(blockPosOld != null)
 			{
