@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
 
 /**
- * This class is responsible for keeping track of an entity.
+ * This class is responsible for keeping track of an entity.</br>
  * Once initialized, binded entity cannot be changed; however, brightness can be changed at each update.
  * 
  * @author pyy
@@ -23,12 +23,12 @@ public abstract class LightSourceEntity
 		this.lightLevel = lightLevel;
 	}
 	
-	public BlockPos getBlockPos()
+	public final BlockPos getBlockPos()
 	{
 		return this.lightBlockPos;
 	}
 	
-	public int getLightLevel()
+	public final int getLightLevel()
 	{
 		return this.lightLevel;
 	}

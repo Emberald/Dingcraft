@@ -1,6 +1,7 @@
 package com.dingcraft.ding.entitylighting;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -8,12 +9,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityMinecartFurnace;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -87,6 +89,11 @@ public class EntityLighting
 				LightSourceItem item = new LightSourceItem((EntityItem)event.entity);
 				this.addEntity(item);
 			}
+			else if(event.entity instanceof EntityMinecartFurnace)
+			{
+				LightSourceMinecartFurnace minecart = new LightSourceMinecartFurnace((EntityMinecartFurnace)event.entity);
+				this.addEntity(minecart);
+			}
 		}
 	}
 	
@@ -94,41 +101,37 @@ public class EntityLighting
 	public void tick(TickEvent.ClientTickEvent event)
 	{
 		if(event.phase == Phase.START || this.mcInstance.theWorld == null) return;
-		
-		int i = 0;
-		LightSourceEntity lightEntity = null;
+		LightSourceEntity lightEntity = null;		
 		
 		//remove entities
-		while(i < this.trackedEntities.size())
+		Iterator<LightSourceEntity> iteratorLightEntity = this.trackedEntities.iterator();
+		while(iteratorLightEntity.hasNext())
 		{
-			lightEntity = this.trackedEntities.get(i);
+			lightEntity = iteratorLightEntity.next();
 			if(lightEntity.entity.worldObj != this.mcInstance.theWorld)
-				this.trackedEntities.remove(i);
+				iteratorLightEntity.remove();
 			else if(lightEntity.onUpdate())
 			{
-				this.trackedEntities.remove(i);
+				iteratorLightEntity.remove();
 				this.checkLight(lightEntity.getBlockPos());
 			}
-			else
-				i++;
 		}
 		int size;
+		
 		//add entities
 		if(this.mcInstance.theWorld != null)
 		{
-			List<Entity> entityList = this.mcInstance.theWorld.loadedEntityList;
-			int sizeE = entityList.size();
-			size = this.trackedEntities.size();
-			int j;
+			Iterator<Entity> iteratorEntity = this.mcInstance.theWorld.loadedEntityList.iterator();
 			Entity entity;
-			for(i = 0; i < sizeE; i++)
+			while(iteratorEntity.hasNext())
 			{
-				entity = entityList.get(i);
+				entity = iteratorEntity.next();
 				if(entity instanceof EntityLivingBase && entity.isBurning())
 				{
-					for(j = 0; j < size; j++)
-						if(this.trackedEntities.get(j).entity == entity) break;
-					if(j == size)
+					iteratorLightEntity = this.trackedEntities.iterator();
+					while(iteratorLightEntity.hasNext())
+						if(iteratorLightEntity.next().entity == entity) break;
+					if(!iteratorLightEntity.hasNext())
 					{
 						LightSourceBurningCreature entry = new LightSourceBurningCreature((EntityLivingBase)entity);
 						this.addEntity(entry);
@@ -139,23 +142,32 @@ public class EntityLighting
 					int light = LightSourceItemFrame.getLightFromItemFrame((EntityItemFrame)entity);
 					if(light != 0)
 					{
-						for(j = 0; j < size; j++)
-							if(this.trackedEntities.get(j).entity == entity) break;
-						if(j == size)
+						iteratorLightEntity = this.trackedEntities.iterator();
+						while(iteratorLightEntity.hasNext())
+							if(iteratorLightEntity.next().entity == entity) break;
+						if(!iteratorLightEntity.hasNext())
 						{
 							LightSourceItemFrame itemFrame = new LightSourceItemFrame((EntityItemFrame)entity, light);
 							this.addEntity(itemFrame);
 						}
 					}
 				}
+				else if(entity instanceof EntityArrow && entity.isBurning())
+				{
+					iteratorLightEntity = this.trackedEntities.iterator();
+					while(iteratorLightEntity.hasNext())
+						if(iteratorLightEntity.next().entity == entity) break;
+					if(!iteratorLightEntity.hasNext())
+						this.addEntity(new LightSourceBurningItem(entity, 10));
+				}
 			}
 		}
 		
 		//relight
-		size = this.trackedEntities.size();
-		for(i = 0; i < size; i++)
+		iteratorLightEntity = this.trackedEntities.iterator();
+		while(iteratorLightEntity.hasNext())
 		{
-			lightEntity = this.trackedEntities.get(i);
+			lightEntity = iteratorLightEntity.next();
 			BlockPos blockPosOld = lightEntity.hasMoved();
 			if(blockPosOld != null)
 			{
@@ -167,13 +179,13 @@ public class EntityLighting
 		}
 	}
 	
-	//Client side, no need to delete light source. Only need to remove tracked entities to free memory.
-	@SubscribeEvent
-	public void unload(WorldEvent.Unload event)
-	{
-		if(event.world == this.mcInstance.theWorld)
-			this.trackedEntities.clear();
-	}
+//	//Client side, no need to delete light source. Only need to remove tracked entities to free memory.
+//	@SubscribeEvent
+//	public void unload(WorldEvent.Unload event)
+//	{
+//		if(event.world == this.mcInstance.theWorld)
+//			this.trackedEntities.clear();
+//	}
 	
 	private void checkLight(BlockPos pos)
 	{
@@ -287,17 +299,14 @@ public class EntityLighting
 
 	public int getBlockLightEmitLvl(BlockPos pos)
 	{
-		int size = trackedEntities.size();
 		LightSourceEntity entry;
 		int lightLvl = 0;
-		for(int i = 0; i < size; i++)
+		Iterator<LightSourceEntity> iterator = this.trackedEntities.iterator();
+		while(iterator.hasNext())
 		{
-			entry = trackedEntities.get(i);
+			entry = iterator.next();
 			if(entry.getBlockPos().equals(pos) && entry.entity.worldObj == this.mcInstance.theWorld)
-			{
-				lightLvl = entry.getLightLevel();
-				break;
-			}
+				lightLvl = Math.max(lightLvl, entry.getLightLevel());
 		}
 		return Math.max(lightLvl, this.mcInstance.theWorld.getBlockState(pos).getBlock().getLightValue());
 	}
