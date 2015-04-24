@@ -23,10 +23,13 @@ import com.dingcraft.ding.entity.EntityArrowFission;
 import com.dingcraft.ding.entity.EntityArrowTorch;
 import com.dingcraft.ding.entity.EntityArrowVoid;
 import com.dingcraft.ding.entitylighting.EntityLighting;
+import com.dingcraft.ding.eventhandler.EventHandlerBow;
+import com.dingcraft.ding.eventhandler.EventHandlerPlayerDrops;
 import com.dingcraft.ding.item.ItemDing;
+import com.dingcraft.ding.item.ItemPocketWatch;
 import com.dingcraft.ding.item.ItemWandDing;
-import com.dingcraft.ding.item.skill.SkillOmnipunch;
 import com.dingcraft.ding.proxy.CommonProxy;
+import com.dingcraft.ding.skill.SkillOmnipunch;
 
 @Mod(modid = Dingcraft.MODID, name = Dingcraft.MODNAME, version = Dingcraft.VERSION)
 public class Dingcraft
@@ -47,10 +50,12 @@ public class Dingcraft
 
 	public static ItemDing dingItem = new ItemDing();
 	public static ItemWandDing dingWand = new ItemWandDing();
+	public static ItemPocketWatch pocketWatch = new ItemPocketWatch();
 	public static SkillOmnipunch omnipunch = new SkillOmnipunch();
 
-	public static EventHandlerBow handler = new EventHandlerBow();
+	public static EventHandlerBow handlerBow = new EventHandlerBow();
 	public static EntityLighting entityLighting = new EntityLighting();
+	public static EventHandlerPlayerDrops handlerDrops = new EventHandlerPlayerDrops();
 
 	public static CreativeTabs tabSkills = new CreativeTabs("tabSkills") {
 	    @SideOnly(Side.CLIENT)
@@ -68,7 +73,8 @@ public class Dingcraft
 //		GameRegistry.registerBlock(Dingcraft.meteorBlock, BlockMeteor.name);
 		//items
 		GameRegistry.registerItem(Dingcraft.dingItem, ItemDing.name);
-		GameRegistry.registerItem(Dingcraft.dingWand, ItemWandDing.name);    	
+		GameRegistry.registerItem(Dingcraft.dingWand, ItemWandDing.name); 
+		GameRegistry.registerItem(Dingcraft.pocketWatch, ItemPocketWatch.name);    	
 //		GameRegistry.registerItem(Dingcraft.omnipunch, SkillOmnipunch.name);    	
 		//entity
 		EntityRegistry.registerModEntity(EntityArrowFission.class, "FissionArrow", 1, Dingcraft.instance, 64, 10, true);
@@ -94,6 +100,7 @@ public class Dingcraft
 	public void stop(FMLServerStoppingEvent event)
 	{
 		this.entityLighting.stop();
+		this.pocketWatch.resetTimeRate();
 	}
 	
 }
