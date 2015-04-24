@@ -5,7 +5,9 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import com.dingcraft.ding.Dingcraft;
 import com.dingcraft.ding.block.BlockDing;
@@ -13,6 +15,7 @@ import com.dingcraft.ding.entity.EntityArrowFission;
 import com.dingcraft.ding.entity.EntityArrowTorch;
 import com.dingcraft.ding.entity.EntityArrowVoid;
 import com.dingcraft.ding.entity.EntityOmnipunch;
+import com.dingcraft.ding.entitylighting.EntityLighting;
 import com.dingcraft.ding.item.ItemDing;
 import com.dingcraft.ding.item.ItemPocketWatch;
 import com.dingcraft.ding.item.ItemWandDing;
@@ -25,6 +28,12 @@ public class ClientProxy extends CommonProxy
 	public void register()
 	{
 		super.register();
+
+		Dingcraft.entityLighting = new EntityLighting();
+		MinecraftForge.EVENT_BUS.register(Dingcraft.entityLighting);
+		FMLCommonHandler.instance().bus().register(Dingcraft.entityLighting);
+
+		//renderers are client side only, so register here.
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
       
 		//blocks' items
