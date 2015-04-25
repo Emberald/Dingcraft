@@ -79,11 +79,6 @@ public class EntityArrowTorch extends EntityArrowBase
 					this.setDead();
 				}
 			}
-			
-//			if(!this.isDead)
-//			{
-//				this.entityDropItem(new ItemStack(Blocks.torch, 1), 0.0F);				
-//			}
 		}
 		
 		return true;
@@ -107,7 +102,12 @@ public class EntityArrowTorch extends EntityArrowBase
 			}
 			this.setDead();
 		}
-
+		
+		if(this.inGround)
+		{
+			this.ticksInGround += 2;
+		}
+		
 		if(!this.isDead)
 		{
 			float f = this.rand.nextFloat();
