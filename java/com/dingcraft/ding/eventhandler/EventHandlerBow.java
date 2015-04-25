@@ -4,7 +4,6 @@ import java.util.Random;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
@@ -67,7 +66,16 @@ public class EventHandlerBow
 			if(lvlPunch > 0)
 	            arrow.setKnockbackStrength(lvlPunch);
 			event.bow.damageItem(1, event.entityPlayer);
-			world.playSoundAtEntity(event.entityPlayer, "random.bow", 1.0F, 1.0F / (Rnd.nextFloat() * 0.4F + 1.2F) + charge * 0.25F);
+			
+			if(arrow instanceof EntityArrowVoid)
+			{
+				world.playSoundAtEntity(event.entityPlayer,(Dingcraft.MODID + ":" + "item.bow"), 0.3F, 1.0F / (Rnd.nextFloat() * 0.4F + 1.2F) + charge * 0.25F + 0.2F);
+			}
+			else
+			{
+				world.playSoundAtEntity(event.entityPlayer, "random.bow", 1.0F, 1.0F / (Rnd.nextFloat() * 0.4F + 1.2F) + charge * 0.25F);				
+			}
+			
 			if(flag)
 				arrow.canBePickedUp = 2;
 			else

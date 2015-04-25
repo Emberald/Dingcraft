@@ -10,7 +10,6 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,7 +49,9 @@ public class Dingcraft
 	public static SkillOmnipunch omnipunch = new SkillOmnipunch();
 
 	public static EventHandlerBow handler = new EventHandlerBow();
-	public static EntityLighting entityLighting = new EntityLighting();
+	
+	@SideOnly(Side.CLIENT)
+	public static EntityLighting entityLighting;
 
 	public static CreativeTabs tabSkills = new CreativeTabs("tabSkills") {
 	    @SideOnly(Side.CLIENT)
@@ -68,7 +69,7 @@ public class Dingcraft
 //		GameRegistry.registerBlock(Dingcraft.meteorBlock, BlockMeteor.name);
 		//items
 		GameRegistry.registerItem(Dingcraft.dingItem, ItemDing.name);
-		GameRegistry.registerItem(Dingcraft.dingWand, ItemWandDing.name);    	
+		GameRegistry.registerItem(Dingcraft.dingWand, ItemWandDing.name);
 //		GameRegistry.registerItem(Dingcraft.omnipunch, SkillOmnipunch.name);    	
 		//entity
 		EntityRegistry.registerModEntity(EntityArrowFission.class, "FissionArrow", 1, Dingcraft.instance, 64, 10, true);
@@ -89,11 +90,5 @@ public class Dingcraft
 	{
 		proxy.register();
 	}
-	
-	@EventHandler
-	public void stop(FMLServerStoppingEvent event)
-	{
-		this.entityLighting.stop();
-	}
-	
+
 }
