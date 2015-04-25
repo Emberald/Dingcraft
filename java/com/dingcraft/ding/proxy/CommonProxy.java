@@ -10,10 +10,10 @@ public class CommonProxy
 	public void register()
 	{
 		//Forge event handler registry
-		MinecraftForge.EVENT_BUS.register(Dingcraft.handler);
-		MinecraftForge.EVENT_BUS.register(Dingcraft.entityLighting);
+		MinecraftForge.EVENT_BUS.register(Dingcraft.handlerBow);
+		MinecraftForge.EVENT_BUS.register(Dingcraft.handlerDrops);
 		//FML event handler registry
-		FMLCommonHandler.instance().bus().register(Dingcraft.handler);
-		FMLCommonHandler.instance().bus().register(Dingcraft.entityLighting);
+		FMLCommonHandler.instance().bus().register(Dingcraft.handlerBow);
+		FMLCommonHandler.instance().bus().register(Dingcraft.handlerDrops);
 	}
 }
