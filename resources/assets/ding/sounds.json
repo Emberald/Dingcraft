@@ -1,20 +1,20 @@
 {
-    "bow": {
+    "attack.voidArrow": {
     "category": "neutral",
     "sounds": [
-      "random/bow"
+      "attack/voidArrow"
     ]
   },
   
     "step.ding": {
-    "category": "hostile",
+    "category": "neutral",
     "sounds": [
       "block/dingCurse"
     ]
   },
   
     "dig.ding": {
-    "category": "hostile",
+    "category": "neutral",
     "sounds": [
       "block/dingGreet"
     ]

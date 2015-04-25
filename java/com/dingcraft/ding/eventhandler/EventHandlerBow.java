@@ -1,4 +1,4 @@
-package com.dingcraft.ding;
+package com.dingcraft.ding.eventhandler;
 
 import java.util.Random;
 
@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import com.dingcraft.ding.Dingcraft;
 import com.dingcraft.ding.entity.EntityArrowBase;
 import com.dingcraft.ding.entity.EntityArrowFission;
 import com.dingcraft.ding.entity.EntityArrowTorch;
@@ -69,7 +70,7 @@ public class EventHandlerBow
 			
 			if(arrow instanceof EntityArrowVoid)
 			{
-				world.playSoundAtEntity(event.entityPlayer,(Dingcraft.MODID + ":" + "item.bow"), 0.3F, 1.0F / (Rnd.nextFloat() * 0.4F + 1.2F) + charge * 0.25F + 0.2F);
+				world.playSoundAtEntity(event.entityPlayer,(Dingcraft.MODID + ":" + "attack.voidArrow"), 0.2F, 1.0F / (Rnd.nextFloat() * 0.4F + 1.2F) + charge * 0.25F + 0.2F);
 			}
 			else
 			{
