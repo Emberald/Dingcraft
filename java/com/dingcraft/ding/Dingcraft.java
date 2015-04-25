@@ -1,5 +1,8 @@
 package com.dingcraft.ding;
 
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -26,6 +29,7 @@ import com.dingcraft.ding.entitylighting.EntityLighting;
 import com.dingcraft.ding.eventhandler.EventHandlerBow;
 import com.dingcraft.ding.eventhandler.EventHandlerPlayerDrops;
 import com.dingcraft.ding.item.ItemDing;
+import com.dingcraft.ding.item.ItemFlashLight;
 import com.dingcraft.ding.item.ItemPocketWatch;
 import com.dingcraft.ding.item.ItemWandDing;
 import com.dingcraft.ding.proxy.CommonProxy;
@@ -44,14 +48,17 @@ public class Dingcraft
 	@Instance(Dingcraft.MODID)
 	public static Dingcraft instance;
 
+	public static ArrayList<Block> listBlock = new ArrayList();
 	public static BlockDing dingBlock = new BlockDing();
 	public static BlockPhoton photonBlock = new BlockPhoton();
 	public static BlockMeteor meteorBlock = new BlockMeteor();
 
+	public static ArrayList<Item> listItem = new ArrayList();
 	public static ItemDing dingItem = new ItemDing();
 	public static ItemWandDing dingWand = new ItemWandDing();
 	public static ItemPocketWatch pocketWatch = new ItemPocketWatch();
 	public static SkillOmnipunch omnipunch = new SkillOmnipunch();
+	public static ItemFlashLight flashLight = new ItemFlashLight();
 
 	public static EventHandlerBow handlerBow = new EventHandlerBow();
 	public static EventHandlerPlayerDrops handlerDrops = new EventHandlerPlayerDrops();
@@ -64,37 +71,30 @@ public class Dingcraft
 	        return Items.nether_star;
 	    }
 	};
-	
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		//blocks
-		GameRegistry.registerBlock(Dingcraft.dingBlock, BlockDing.name);
-		GameRegistry.registerBlock(Dingcraft.photonBlock, BlockPhoton.name);
-//		GameRegistry.registerBlock(Dingcraft.meteorBlock, BlockMeteor.name);
-		//items
-		GameRegistry.registerItem(Dingcraft.dingItem, ItemDing.name);
-		GameRegistry.registerItem(Dingcraft.dingWand, ItemWandDing.name); 
-		GameRegistry.registerItem(Dingcraft.pocketWatch, ItemPocketWatch.name);    	
-//		GameRegistry.registerItem(Dingcraft.omnipunch, SkillOmnipunch.name);    	
-		//entity
-		EntityRegistry.registerModEntity(EntityArrowFission.class, "FissionArrow", 1, Dingcraft.instance, 64, 10, true);
-		EntityRegistry.registerModEntity(EntityArrowVoid.class, "VoidArrow", 2, Dingcraft.instance, 64, 10, true);
-		EntityRegistry.registerModEntity(EntityArrowTorch.class, "TorchArrow", 3, Dingcraft.instance, 64, 10, true);
-//		EntityRegistry.registerModEntity(EntityOmnipunch.class, "Omnipunch", 4, Dingcraft.instance, 64, 10, true);
-		//tile entity
-		GameRegistry.registerTileEntity(com.dingcraft.ding.tileentity.TileEntityPhoton.class, "PhotonTileEntity");
-		//craft and smelt
-		GameRegistry.addRecipe(new ItemStack(Dingcraft.dingBlock),"AAA","AAA","AAA",'A',new ItemStack(Dingcraft.dingItem));
-		GameRegistry.addRecipe(new ItemStack(Dingcraft.dingItem,9),"A",'A',Dingcraft.dingBlock);
-		GameRegistry.addSmelting(new ItemStack(Items.gold_ingot),new ItemStack(Dingcraft.dingItem), 4F);
-		GameRegistry.addRecipe(new ItemStack(Dingcraft.dingWand),"A","B","B",'A',new ItemStack(Dingcraft.dingItem),'B',Items.stick);
+		listBlock.add(dingBlock);
+		listBlock.add(photonBlock);
+//		listBlock.add(meteorBlock);
+		
+		listItem.add(dingItem);
+		listItem.add(dingWand);
+		listItem.add(pocketWatch);
+//		listItem.add(omnipunch);
+		listItem.add(flashLight);
+		
+		proxy.registerBlockAndItem();
+		proxy.registerEntity();
+		proxy.registerRecipe();
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
-		proxy.register();
+		proxy.registerHandler();
+		proxy.registerRenderer();
 	}
 	
 	@EventHandler
@@ -102,5 +102,5 @@ public class Dingcraft
 	{
 		this.pocketWatch.resetTimeRate();
 	}
-	
+
 }
