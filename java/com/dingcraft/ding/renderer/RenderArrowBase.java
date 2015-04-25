@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 import com.dingcraft.ding.entity.EntityArrowBase;
 
 @SideOnly(Side.CLIENT)
-public class RenderArrowGeneral extends Render
+public class RenderArrowBase extends Render
 {
 	/* This renderer is intended to do render for all subclasses of EntityArrowGeneral.
 	 * If you want this renderer to do render for your subclass:
@@ -26,7 +26,7 @@ public class RenderArrowGeneral extends Render
 	 * If you want to write another renderer for your subclass, it is not necessary to make your renderer a subclass of this renderer,
 	 *   and in method getTexture() you can simply return null.
 	 */
-	public RenderArrowGeneral(RenderManager renderManager)
+	public RenderArrowBase(RenderManager renderManager)
 	{
 		super(renderManager);
 	}

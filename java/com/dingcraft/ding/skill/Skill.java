@@ -1,4 +1,4 @@
-package com.dingcraft.ding.item.skill;
+package com.dingcraft.ding.skill;
 
 import com.dingcraft.ding.Dingcraft;
 
