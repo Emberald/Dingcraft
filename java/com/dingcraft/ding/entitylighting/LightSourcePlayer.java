@@ -20,18 +20,20 @@ public class LightSourcePlayer extends LightSourceEntity
 
 	public boolean onUpdate()
 	{
-		ItemStack itemStack = ((EntityPlayer)this.entity).getCurrentArmor(3);
-		if(itemStack == null)
-			flag = false;
-		else if(itemStack.getItem().equals(LightSourceMinerHelmet.boundItem))
+		if(LightSourceSpotlight.hasLight((EntityPlayer)this.entity))
 		{
 			if(!flag)
-				Dingcraft.entityLighting.addEntity(new LightSourceMinerHelmet((EntityPlayer)this.entity));
-			flag = true;
+			{
+				Dingcraft.entityLighting.addEntity(new LightSourceSpotlight((EntityPlayer)this.entity));				
+				flag = true;
+			}
 		}
 		else
+		{
 			flag = false;
-		itemStack = ((EntityPlayer)this.entity).getHeldItem();
+		}
+
+		ItemStack itemStack = ((EntityPlayer)this.entity).getHeldItem();
 		if(itemStack != null)
 			this.lightLevel = LightSourceItem.getLightFromItem(itemStack.getItem());
 		else
