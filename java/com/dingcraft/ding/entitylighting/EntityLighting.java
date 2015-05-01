@@ -161,7 +161,7 @@ public class EntityLighting
 					for(i = 0; i < size; i++)
 						if(this.trackedEntities.get(i).entity == entity) break;
 					if(i == size)
-						this.addEntity(new LightSourceBurningItem(entity, 10));
+						this.addEntity(new LightSourceBurningItem(entity, 7));
 				}
 			}
 		}
