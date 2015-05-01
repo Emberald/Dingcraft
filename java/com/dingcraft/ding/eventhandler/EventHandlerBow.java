@@ -46,7 +46,7 @@ public class EventHandlerBow
 					lvlPower *= 0.4;
 					lvlPunch *= 0.5;
 					flag = true;
-					event.entityPlayer.inventory.consumeInventoryItem(Items.arrow);					
+					event.entityPlayer.inventory.consumeInventoryItem(Items.arrow);
 					break;
 				case 3:
 					arrow = new EntityArrowFission(world, event.entityPlayer, charge);

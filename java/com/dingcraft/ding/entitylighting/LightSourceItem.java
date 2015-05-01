@@ -40,10 +40,10 @@ public class LightSourceItem extends LightSourceEntity
 	public static int getLightFromItem(Item item)
 	{
 		Block block = Block.getBlockFromItem(item);
-		if(block != null)
-			return MathHelper.floor_float(block.getLightValue() * 0.75F);
-		else if(LightingItems.containsKey(item))
+		if(LightingItems.containsKey(item))
 			return LightingItems.get(item).intValue();
+		else if(block != null)
+			return MathHelper.floor_float(block.getLightValue() * 0.75F);
 		else
 			return 0;
 	}

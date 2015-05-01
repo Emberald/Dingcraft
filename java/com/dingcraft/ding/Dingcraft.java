@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.dingcraft.ding.block.BlockDing;
 import com.dingcraft.ding.block.BlockPhoton;
 import com.dingcraft.ding.entity.EntityArrowFission;
+import com.dingcraft.ding.entity.EntityArrowSniper;
 import com.dingcraft.ding.entity.EntityArrowTorch;
 import com.dingcraft.ding.entity.EntityArrowVoid;
 import com.dingcraft.ding.entitylighting.EntityLighting;
@@ -59,7 +60,8 @@ public class Dingcraft
 	public static final DingcraftEntity[] entities = new DingcraftEntity[] {
 		new DingcraftEntity(EntityArrowFission.class, "FissionArrow", 64, 10, true),
 		new DingcraftEntity(EntityArrowVoid.class, "VoidArrow", 64, 10, true),
-		new DingcraftEntity(EntityArrowTorch.class, "TorchArrow", 64, 10, true)
+		new DingcraftEntity(EntityArrowTorch.class, "TorchArrow", 64, 10, true),
+		new DingcraftEntity(EntityArrowSniper.class, "SniperArrow", 64, 10, true)
 	};
 	
 	public static EventHandlerBow handlerBow = new EventHandlerBow();
