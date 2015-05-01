@@ -1,12 +1,12 @@
 package com.dingcraft.ding;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -14,17 +14,12 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.dingcraft.ding.block.BlockDing;
 import com.dingcraft.ding.block.BlockMeteor;
 import com.dingcraft.ding.block.BlockPhoton;
-import com.dingcraft.ding.entity.EntityArrowFission;
-import com.dingcraft.ding.entity.EntityArrowTorch;
-import com.dingcraft.ding.entity.EntityArrowVoid;
 import com.dingcraft.ding.entitylighting.EntityLighting;
 import com.dingcraft.ding.eventhandler.EventHandlerBow;
 import com.dingcraft.ding.eventhandler.EventHandlerPlayerDrops;
@@ -48,12 +43,10 @@ public class Dingcraft
 	@Instance(Dingcraft.MODID)
 	public static Dingcraft instance;
 
-	public static ArrayList<Block> listBlock = new ArrayList();
 	public static BlockDing dingBlock = new BlockDing();
 	public static BlockPhoton photonBlock = new BlockPhoton();
 	public static BlockMeteor meteorBlock = new BlockMeteor();
 
-	public static ArrayList<Item> listItem = new ArrayList();
 	public static ItemDing dingItem = new ItemDing();
 	public static ItemWandDing dingWand = new ItemWandDing();
 	public static ItemPocketWatch pocketWatch = new ItemPocketWatch();
@@ -72,18 +65,20 @@ public class Dingcraft
 	    }
 	};
 
+	public static Set<Block> listBlock=  new HashSet<Block>();
+	public static Set<Item> listItem = new HashSet<Item>();
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		listBlock.add(dingBlock);
-		listBlock.add(photonBlock);
-//		listBlock.add(meteorBlock);
-		
-		listItem.add(dingItem);
-		listItem.add(dingWand);
-		listItem.add(pocketWatch);
-//		listItem.add(omnipunch);
-		listItem.add(flashLight);
+		register(dingBlock);
+		register(photonBlock);
+//		register(meteorBlock);
+		register(dingItem);
+		register(dingWand);
+		register(pocketWatch);
+//		register(omnipunch);
+		register(flashLight);
 		
 		proxy.registerBlockAndItem();
 		proxy.registerEntity();
@@ -103,4 +98,13 @@ public class Dingcraft
 		this.pocketWatch.resetTimeRate();
 	}
 
+	private void register(Block blockIn)
+	{
+		listBlock.add(blockIn);
+	}
+	
+	private void register(Item itemIn)
+	{
+		listItem.add(itemIn);
+	}
 }

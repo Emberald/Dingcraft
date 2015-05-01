@@ -7,10 +7,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.dingcraft.ding.Dingcraft;
 import com.dingcraft.ding.entity.EntityArrowFission;
@@ -46,6 +50,16 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityArrowVoid.class, new RenderArrowBase(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityArrowTorch.class, new RenderArrowBase(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityOmnipunch.class, new RenderOmnipunch(renderManager));
+	}
+	
+	public void registerEntity() 
+	{
+		super.registerEntity();
+	}
+	
+	public void registerRecipe() 
+	{
+		super.registerRecipe();
 	}
 	
 	public void registerHandler()
