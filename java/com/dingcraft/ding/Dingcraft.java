@@ -58,10 +58,10 @@ public class Dingcraft
 	};
 	
 	public static final DingcraftEntity[] entities = new DingcraftEntity[] {
-		new DingcraftEntity(EntityArrowFission.class, "FissionArrow", 64, 10, true),
-		new DingcraftEntity(EntityArrowVoid.class, "VoidArrow", 64, 10, true),
-		new DingcraftEntity(EntityArrowTorch.class, "TorchArrow", 64, 10, true),
-		new DingcraftEntity(EntityArrowSniper.class, "SniperArrow", 64, 10, true)
+		new DingcraftEntity(EntityArrowFission.class),
+		new DingcraftEntity(EntityArrowVoid.class),
+		new DingcraftEntity(EntityArrowTorch.class),
+		new DingcraftEntity(EntityArrowSniper.class)
 	};
 	
 	public static EventHandlerBow handlerBow = new EventHandlerBow();
@@ -104,6 +104,16 @@ public class Dingcraft
 		public final int trackingRange;
 		public final int updateFrequency;
 		public final boolean sendsVelocityUpdates;
+		
+		public DingcraftEntity(Class<? extends Entity> entityClass)
+		{
+			this(entityClass, getName(entityClass));
+		}
+		
+		public DingcraftEntity(Class<? extends Entity> entityClass, String name)
+		{
+			this(entityClass, name, 64, 10, true);
+		}
 
 		public DingcraftEntity(Class<? extends Entity> entityClass, String name, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates)
 		{
@@ -112,6 +122,22 @@ public class Dingcraft
 			this.trackingRange = trackingRange;
 			this.updateFrequency = updateFrequency;
 			this.sendsVelocityUpdates = sendsVelocityUpdates;
+		}
+		
+		static final String[] keyWords = {"EntityArrow", "Entity"};
+		
+		public static String getName(Class<? extends Entity> entityClass)
+		{
+			String name = entityClass.getSimpleName();
+			for(String keyWord : keyWords)
+			{
+				if(name.contains(keyWord))
+				{
+					name = name.substring(name.indexOf(keyWord));
+					break;
+				}				
+			}
+			return name;
 		}
 	}
 	
