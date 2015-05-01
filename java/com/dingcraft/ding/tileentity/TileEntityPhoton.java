@@ -28,7 +28,7 @@ public class TileEntityPhoton extends TileEntity implements IUpdatePlayerListBox
     	{
     		IBlockState blockState = this.worldObj.getBlockState(pos);
     		Block lightedBlock = blockState.getBlock();
-    		if(lightedBlock == Dingcraft.photonBlock)
+    		if(lightedBlock == BlockPhoton.instance)
     		{
     			this.worldObj.setBlockToAir(this.pos);    			
     		}

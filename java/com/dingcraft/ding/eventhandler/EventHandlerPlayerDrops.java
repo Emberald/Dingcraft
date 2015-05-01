@@ -18,7 +18,7 @@ public class EventHandlerPlayerDrops
 		for(int i = event.drops.size() - 1; i >= 0; i--)
 		{
 			dropItem = event.drops.get(i).getEntityItem().getItem();
-			if(dropItem instanceof ItemPocketWatch)
+			if(dropItem == ItemPocketWatch.instance)
 			{
 				((ItemPocketWatch)dropItem).setTimeRate(1.0F);
 				event.drops.remove(i);

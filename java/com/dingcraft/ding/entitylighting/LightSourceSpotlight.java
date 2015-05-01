@@ -88,13 +88,9 @@ public class LightSourceSpotlight extends LightSourceEntity
 	public static void addLightSource(Item itemIn, int slotIn)
 	{		
 		if(slotIn == 0)
-		{
 			ItemsInHand.add(itemIn);
-		}
 		else if(slotIn == 1)
-		{
 			ItemsOnHead.add(itemIn);
-		}
 	}
 	
 	/**
@@ -109,9 +105,7 @@ public class LightSourceSpotlight extends LightSourceEntity
 	{
 		ItemStack itemStack = entityPlayer.getCurrentArmor(3);
 		if(itemStack != null && ItemsOnHead.contains(itemStack.getItem()))
-		{
 			return true;
-		}
 		return false;
 	}
 	
@@ -119,9 +113,7 @@ public class LightSourceSpotlight extends LightSourceEntity
 	{
 		ItemStack itemStack = entityPlayer.getHeldItem();
 		if(itemStack != null && ItemsInHand.contains(itemStack.getItem()))
-		{
 			return true;
-		}
 		return false;
 	}
 }

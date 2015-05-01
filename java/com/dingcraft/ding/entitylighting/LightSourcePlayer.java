@@ -29,9 +29,7 @@ public class LightSourcePlayer extends LightSourceEntity
 			}
 		}
 		else
-		{
 			flag = false;
-		}
 
 		ItemStack itemStack = ((EntityPlayer)this.entity).getHeldItem();
 		if(itemStack != null)

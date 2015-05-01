@@ -14,17 +14,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class EntityArrowTorch extends EntityArrowBase
 {
-	protected ResourceLocation getTexture()
-	{
-		return new ResourceLocation("textures/entity/arrow.png");
-	}
-	
 	public EntityArrowTorch(World worldIn)
 	{
 		super(worldIn);

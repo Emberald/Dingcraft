@@ -11,12 +11,12 @@ import net.minecraft.world.World;
 
 public class ItemWandDing extends Item
 {
-	public static final String name = "dingWand";
+	public static final ItemWandDing instance = new ItemWandDing();
 
 	public ItemWandDing()
 	{
 		this.setCreativeTab(CreativeTabs.tabCombat);
-		this.setUnlocalizedName(this.name);
+		this.setUnlocalizedName("dingWand");
 		this.setMaxDamage(30);
 		this.setMaxStackSize(1);
 	}

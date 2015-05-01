@@ -8,13 +8,13 @@ public class BlockDing extends Block
 {
 //	public static final Block.SoundType soundTypeDing = new Block.SoundType("ding", 0.5F, 1.2F);
 
-	public static final String name = "dingBlock";
-
+	public static final BlockDing instance = new BlockDing();
+	
 	public BlockDing()
 	{
 		super(Material.rock);
 		this.setCreativeTab(CreativeTabs.tabBlock);
-		this.setUnlocalizedName(this.name);
+		this.setUnlocalizedName("dingBlock");
 		this.setHardness(2.0f);
 		this.setResistance(10.0f);
 		this.setLightLevel(0.3f);
