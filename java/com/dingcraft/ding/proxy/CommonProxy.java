@@ -22,13 +22,9 @@ public class CommonProxy
 	public void registerBlockAndItem()
 	{
 		for(Block block : Dingcraft.listBlock)
-		{
-			GameRegistry.registerBlock(block, this.getName(block));			
-		}
+			GameRegistry.registerBlock(block, this.getName(block));
 		for(Item item : Dingcraft.listItem)
-		{
-			GameRegistry.registerItem(item, this.getName(item));			
-		}
+			GameRegistry.registerItem(item, this.getName(item));
 	}
 	
 	public void registerEntity() 
@@ -75,7 +71,8 @@ public class CommonProxy
 		{
 			name = ((Block)objectIn).getUnlocalizedName();
 		}
-		return name.substring(5, name.length());
+		name = name.substring(name.indexOf('.') + 1, name.length());
+		return name;
 	}
 
 }

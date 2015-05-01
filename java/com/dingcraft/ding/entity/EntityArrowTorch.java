@@ -104,9 +104,7 @@ public class EntityArrowTorch extends EntityArrowBase
 		}
 		
 		if(this.inGround)
-		{
 			this.ticksInGround += 2;
-		}
 		
 		if(!this.isDead)
 		{

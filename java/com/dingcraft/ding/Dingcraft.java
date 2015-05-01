@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -14,22 +13,16 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.dingcraft.ding.block.BlockDing;
 import com.dingcraft.ding.block.BlockMeteor;
 import com.dingcraft.ding.block.BlockPhoton;
-import com.dingcraft.ding.entity.EntityArrowFission;
-import com.dingcraft.ding.entity.EntityArrowTorch;
-import com.dingcraft.ding.entity.EntityArrowVoid;
 import com.dingcraft.ding.entitylighting.EntityLighting;
 import com.dingcraft.ding.eventhandler.EventHandlerBow;
 import com.dingcraft.ding.eventhandler.EventHandlerPlayerDrops;
 import com.dingcraft.ding.item.ItemDing;
-import com.dingcraft.ding.item.ItemFlashLight;
 import com.dingcraft.ding.item.ItemPocketWatch;
 import com.dingcraft.ding.item.ItemWandDing;
 import com.dingcraft.ding.proxy.CommonProxy;
@@ -58,7 +51,7 @@ public class Dingcraft
 	public static ItemWandDing dingWand = new ItemWandDing();
 	public static ItemPocketWatch pocketWatch = new ItemPocketWatch();
 	public static SkillOmnipunch omnipunch = new SkillOmnipunch();
-	public static ItemFlashLight flashLight = new ItemFlashLight();
+//	public static ItemFlashLight flashLight = new ItemFlashLight();
 
 	public static EventHandlerBow handlerBow = new EventHandlerBow();
 	public static EventHandlerPlayerDrops handlerDrops = new EventHandlerPlayerDrops();
@@ -83,7 +76,7 @@ public class Dingcraft
 		listItem.add(dingWand);
 		listItem.add(pocketWatch);
 //		listItem.add(omnipunch);
-		listItem.add(flashLight);
+//		listItem.add(flashLight);
 		
 		proxy.registerBlockAndItem();
 		proxy.registerEntity();

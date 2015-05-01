@@ -18,10 +18,10 @@ import com.dingcraft.ding.entity.EntityArrowBase;
 @SideOnly(Side.CLIENT)
 public class RenderArrowBase extends Render
 {
-	/* This renderer is intended to do render for all subclasses of EntityArrowGeneral.
+	/* This renderer is intended to do render for all subclasses of EntityArrowBase.
 	 * If you want this renderer to do render for your subclass:
 	 *  1. Register your subclass along with this renderer when the mod is initialized.
-	 *     (e.g. RenderingRegistry.registerEntityRenderingHandler(<your class>, new RenderArrowGeneral(renderManager));
+	 *     (e.g. RenderingRegistry.registerEntityRenderingHandler(<your class>, new RenderArrowBase(renderManager));
 	 *  2. Implement method getTexture() which returns a proper resource location for the arrow texture.
 	 * If you want to write another renderer for your subclass, it is not necessary to make your renderer a subclass of this renderer,
 	 *   and in method getTexture() you can simply return null.

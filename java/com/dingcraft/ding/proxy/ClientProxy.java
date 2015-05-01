@@ -1,7 +1,5 @@
 package com.dingcraft.ding.proxy;
 
-import java.util.ArrayList;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
@@ -16,10 +14,8 @@ import com.dingcraft.ding.Dingcraft;
 import com.dingcraft.ding.entity.EntityArrowFission;
 import com.dingcraft.ding.entity.EntityArrowTorch;
 import com.dingcraft.ding.entity.EntityArrowVoid;
-import com.dingcraft.ding.entity.EntityOmnipunch;
 import com.dingcraft.ding.entitylighting.EntityLighting;
 import com.dingcraft.ding.renderer.RenderArrowBase;
-import com.dingcraft.ding.renderer.RenderOmnipunch;
 
 public class ClientProxy extends CommonProxy
 {	
@@ -32,20 +28,16 @@ public class ClientProxy extends CommonProxy
 		
 		//blocks' items
 		for(Block block : Dingcraft.listBlock)
-		{
 			itemModelMesher.register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(Dingcraft.MODID + ":" + this.getName(block), "inventory"));
-		}
 		//items
 		for(Item item : Dingcraft.listItem)
-		{
 			itemModelMesher.register(item, 0, new ModelResourceLocation(Dingcraft.MODID + ":" + this.getName(item), "inventory"));
-		}
 		//entities
 		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
 		RenderingRegistry.registerEntityRenderingHandler(EntityArrowFission.class, new RenderArrowBase(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityArrowVoid.class, new RenderArrowBase(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityArrowTorch.class, new RenderArrowBase(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(EntityOmnipunch.class, new RenderOmnipunch(renderManager));
+//		RenderingRegistry.registerEntityRenderingHandler(EntityOmnipunch.class, new RenderOmnipunch(renderManager));
 	}
 	
 	public void registerHandler()
