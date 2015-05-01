@@ -1,18 +1,18 @@
 package com.dingcraft.ding.item;
 
-import com.dingcraft.ding.entitylighting.LightSourceSpotlight;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
+import com.dingcraft.ding.entitylighting.LightSourceSpotlight;
+
 public class ItemFlashLight extends Item
 {
-	public static final String name = "flashLight";
+	public static final ItemFlashLight instance = new ItemFlashLight();
 	
 	public ItemFlashLight()
 	{
 		this.setCreativeTab(CreativeTabs.tabTools);
-		this.setUnlocalizedName(this.name);
+		this.setUnlocalizedName("flashLight");
 		this.setMaxStackSize(1);
 		LightSourceSpotlight.addLightSource(this, 0);
 	}

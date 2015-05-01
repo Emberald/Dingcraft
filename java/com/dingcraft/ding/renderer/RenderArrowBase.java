@@ -14,21 +14,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import com.dingcraft.ding.entity.EntityArrowBase;
-
+/**
+ * This renderer is intended to do render for all subclasses of EntityArrowBase.
+ * Register the arrow subclass along with this renderer if you want this renderer to do render for the subclass.
+ * 
+ * @author pyy
+ *
+ */
 @SideOnly(Side.CLIENT)
 public class RenderArrowBase extends Render
 {
-	/* This renderer is intended to do render for all subclasses of EntityArrowGeneral.
-	 * If you want this renderer to do render for your subclass:
-	 *  1. Register your subclass along with this renderer when the mod is initialized.
-	 *     (e.g. RenderingRegistry.registerEntityRenderingHandler(<your class>, new RenderArrowGeneral(renderManager));
-	 *  2. Implement method getTexture() which returns a proper resource location for the arrow texture.
-	 * If you want to write another renderer for your subclass, it is not necessary to make your renderer a subclass of this renderer,
-	 *   and in method getTexture() you can simply return null.
-	 */
-	public RenderArrowBase(RenderManager renderManager)
+	private final ResourceLocation arrowTextures;
+	
+	public RenderArrowBase(RenderManager renderManager, String texture)
 	{
 		super(renderManager);
+		this.arrowTextures = new ResourceLocation(texture);
 	}
 
 	public void doRender(Entity entity, double x, double y, double z, float p_180551_8_, float partialTicks)
@@ -97,7 +98,7 @@ public class RenderArrowBase extends Render
 
 	protected ResourceLocation getEntityTexture(Entity entity)
 	{
-		return ((EntityArrowBase)entity).arrowTextures;
+		return this.arrowTextures;
 	}
 
 }

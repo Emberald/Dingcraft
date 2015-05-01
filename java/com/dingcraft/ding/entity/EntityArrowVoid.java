@@ -6,20 +6,13 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import com.dingcraft.ding.DamageSourceDing;
-import com.dingcraft.ding.Dingcraft;
 
 public class EntityArrowVoid extends EntityArrowBase
 {
-	protected ResourceLocation getTexture()
-	{
-		return new ResourceLocation(Dingcraft.MODID + ":textures/entity/arrowDing.png");
-	}
-
 	public EntityArrowVoid(World worldIn)
 	{
 		super(worldIn);

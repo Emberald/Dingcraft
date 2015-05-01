@@ -1,7 +1,5 @@
 package com.dingcraft.ding.item;
 
-import java.awt.Color;
-
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,8 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.dingcraft.ding.skill.SkillTimeManipulation;
 
@@ -26,16 +22,14 @@ public class ItemPocketWatch extends Item
 	public static final double RATE_STEP = 0.05;
 	public int ticksAtRest;
 	
-	public static final String name = "pocketWatch";
+	public static final ItemPocketWatch instance = new ItemPocketWatch();
 
 	public ItemPocketWatch()
 	{
 		this.setCreativeTab(CreativeTabs.tabTools);
-		this.setUnlocalizedName(this.name);
+		this.setUnlocalizedName("pocketWatch");
 		this.setMaxDamage(100);
 		this.setMaxStackSize(1);
-		
-		this.timeRate = 1.0F;
 	}
 
     public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
@@ -45,6 +39,7 @@ public class ItemPocketWatch extends Item
     		if(this.timer == null)
     		{
     			this.timer = new SkillTimeManipulation();
+                this.resetTimeRate();
     		}
     		
     		if(this.ticksAtRest <= 0)
@@ -90,7 +85,7 @@ public class ItemPocketWatch extends Item
     
     public void resetTimeRate()
     {
-    	this.setTimeRate(1.0F);
+    	this.setTimeRate(1.0);
     }
     
     public void setTimeRate(double timeRate)

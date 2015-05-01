@@ -12,7 +12,7 @@ public class Skill extends Item
 {
 	public Skill()
 	{
-		this.setCreativeTab(Dingcraft.tabSkills);
+//		this.setCreativeTab(Dingcraft.tabSkills);
 
 	}    
     

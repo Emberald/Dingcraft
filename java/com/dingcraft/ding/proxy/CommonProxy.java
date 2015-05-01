@@ -1,7 +1,5 @@
 package com.dingcraft.ding.proxy;
 
-import java.util.ArrayList;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -13,31 +11,27 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.dingcraft.ding.Dingcraft;
 import com.dingcraft.ding.block.BlockDing;
-import com.dingcraft.ding.entity.EntityArrowFission;
-import com.dingcraft.ding.entity.EntityArrowTorch;
-import com.dingcraft.ding.entity.EntityArrowVoid;
+import com.dingcraft.ding.item.ItemDing;
+import com.dingcraft.ding.item.ItemWandDing;
 
 public class CommonProxy
 {
 	public void registerBlockAndItem()
 	{
-		for(Block block : Dingcraft.listBlock)
-		{
-			GameRegistry.registerBlock(block, this.getName(block));			
-		}
-		for(Item item : Dingcraft.listItem)
-		{
-			GameRegistry.registerItem(item, this.getName(item));			
-		}
+		for(Block block : Dingcraft.blocks)
+			GameRegistry.registerBlock(block, this.getName(block));
+		for(Item item : Dingcraft.items)
+			GameRegistry.registerItem(item, this.getName(item));
 	}
 	
 	public void registerEntity() 
 	{
+		int idCounter = 0;
+
 		//entity
-		EntityRegistry.registerModEntity(EntityArrowFission.class, "FissionArrow", 1, Dingcraft.instance, 64, 10, true);
-		EntityRegistry.registerModEntity(EntityArrowVoid.class, "VoidArrow", 2, Dingcraft.instance, 64, 10, true);
-		EntityRegistry.registerModEntity(EntityArrowTorch.class, "TorchArrow", 3, Dingcraft.instance, 64, 10, true);
-//		EntityRegistry.registerModEntity(EntityOmnipunch.class, "Omnipunch", 4, Dingcraft.instance, 64, 10, true);
+		for(Dingcraft.DingcraftEntity entity : Dingcraft.entities)
+			EntityRegistry.registerModEntity(entity.entityClass, entity.name, ++idCounter, Dingcraft.instance, entity.trackingRange, entity.updateFrequency, entity.sendsVelocityUpdates);
+
 		//tileentity
 //		GameRegistry.registerTileEntity(com.dingcraft.ding.tileentity.TileEntityPhoton.class, "PhotonTileEntity");
 	}
@@ -45,11 +39,11 @@ public class CommonProxy
 	public void registerRecipe() 
 	{
 		//recipe
-		GameRegistry.addRecipe(new ItemStack(Dingcraft.dingBlock),"AAA","AAA","AAA",'A',new ItemStack(Dingcraft.dingItem));
-		GameRegistry.addRecipe(new ItemStack(Dingcraft.dingItem,9),"A",'A',Dingcraft.dingBlock);
-		GameRegistry.addRecipe(new ItemStack(Dingcraft.dingWand),"A","B","B",'A',new ItemStack(Dingcraft.dingItem),'B',Items.stick);
+		GameRegistry.addRecipe(new ItemStack(BlockDing.instance), "AAA", "AAA", "AAA", 'A', ItemDing.instance);
+		GameRegistry.addRecipe(new ItemStack(ItemDing.instance, 9), "A", 'A', BlockDing.instance);
+		GameRegistry.addRecipe(new ItemStack(ItemWandDing.instance), "A", "B", "B", 'A', ItemDing.instance, 'B', Items.stick);
 		//smelting
-		GameRegistry.addSmelting(new ItemStack(Items.gold_ingot),new ItemStack(Dingcraft.dingItem), 4F);
+		GameRegistry.addSmelting(new ItemStack(Items.gold_ingot),new ItemStack(ItemDing.instance), 4F);
 	}
 
 	public void registerRenderer() {}
@@ -64,18 +58,14 @@ public class CommonProxy
 		FMLCommonHandler.instance().bus().register(Dingcraft.handlerDrops);
 	}
 	
-	public String getName(Object objectIn)
+	public String getName(Item item)
 	{
-		String name = null;
-		if(objectIn instanceof Item)
-		{
-			name = ((Item)objectIn).getUnlocalizedName();
-		}
-		else if(objectIn instanceof Block)
-		{
-			name = ((Block)objectIn).getUnlocalizedName();
-		}
-		return name.substring(5, name.length());
+		return item.getUnlocalizedName().substring(5);
 	}
 
+	public String getName(Block block)
+	{
+		return block.getUnlocalizedName().substring(5);
+	}
+	
 }

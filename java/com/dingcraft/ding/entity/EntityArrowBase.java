@@ -53,10 +53,6 @@ public abstract class EntityArrowBase extends Entity implements IProjectile
 	protected float gravity = 0.05F;
 	protected EnumParticleTypes typePartical = EnumParticleTypes.CRIT;
 	
-	public final ResourceLocation arrowTextures = this.getTexture();
-
-	protected abstract ResourceLocation getTexture();
-
 	public EntityArrowBase(World worldIn)
 	{
 		super(worldIn);

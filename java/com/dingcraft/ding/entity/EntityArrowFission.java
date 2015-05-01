@@ -9,18 +9,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class EntityArrowFission extends EntityArrowBase
 {
 	protected int fissionCnt = 6;
-	
-	protected ResourceLocation getTexture()
-	{
-		return new ResourceLocation("textures/entity/arrow.png");
-	}
 	
 	public EntityArrowFission(World worldIn)
 	{
