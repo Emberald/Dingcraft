@@ -8,7 +8,7 @@ public class LightSourceArrowTorch extends LightSourceEntity
 {
 	public LightSourceArrowTorch(EntityArrowTorch arrow)
 	{
-		super(arrow, 10);
+		super(arrow, 12);
 	}
 
 	public boolean onUpdate()
