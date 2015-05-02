@@ -7,8 +7,6 @@ import net.minecraft.creativetab.CreativeTabs;
 public class BlockDing extends Block
 {
 //	public static final Block.SoundType soundTypeDing = new Block.SoundType("ding", 0.5F, 1.2F);
-
-	public static final BlockDing instance = new BlockDing();
 	
 	public BlockDing()
 	{

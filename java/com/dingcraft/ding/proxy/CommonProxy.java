@@ -1,6 +1,7 @@
 package com.dingcraft.ding.proxy;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,17 +11,16 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.dingcraft.ding.Dingcraft;
-import com.dingcraft.ding.block.BlockDing;
-import com.dingcraft.ding.item.ItemDing;
-import com.dingcraft.ding.item.ItemWandDing;
+import com.dingcraft.ding.block.DingBlocks;
+import com.dingcraft.ding.item.DingItems;
 
 public class CommonProxy
 {
 	public void registerBlockAndItem()
 	{
-		for(Block block : Dingcraft.blocks)
+		for(Block block : DingBlocks.blocks)
 			GameRegistry.registerBlock(block, this.getName(block));
-		for(Item item : Dingcraft.items)
+		for(Item item : DingItems.items)
 			GameRegistry.registerItem(item, this.getName(item));
 	}
 	
@@ -39,11 +39,12 @@ public class CommonProxy
 	public void registerRecipe() 
 	{
 		//recipe
-		GameRegistry.addRecipe(new ItemStack(BlockDing.instance), "AAA", "AAA", "AAA", 'A', ItemDing.instance);
-		GameRegistry.addRecipe(new ItemStack(ItemDing.instance, 9), "A", 'A', BlockDing.instance);
-		GameRegistry.addRecipe(new ItemStack(ItemWandDing.instance), "A", "B", "B", 'A', ItemDing.instance, 'B', Items.stick);
+		GameRegistry.addRecipe(new ItemStack(DingBlocks.dingBlock), "AAA", "AAA", "AAA", 'A', DingItems.dingItem);
+		GameRegistry.addRecipe(new ItemStack(DingItems.dingItem, 9), "A", 'A', DingBlocks.dingBlock);
+		GameRegistry.addRecipe(new ItemStack(DingItems.dingWand), "A", "B", "B", 'A', DingItems.dingItem, 'B', Items.stick);
+		GameRegistry.addShapelessRecipe(new ItemStack(DingItems.arrowTorch), Items.arrow, Item.getItemFromBlock(Blocks.torch), Items.slime_ball);
 		//smelting
-		GameRegistry.addSmelting(new ItemStack(Items.gold_ingot),new ItemStack(ItemDing.instance), 4F);
+		GameRegistry.addSmelting(new ItemStack(Items.gold_ingot),new ItemStack(DingItems.dingItem), 4F);
 	}
 
 	public void registerRenderer() {}

@@ -8,7 +8,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.util.MathHelper;
 
 import com.google.common.collect.ImmutableMap;
@@ -19,7 +18,8 @@ public class LightSourceItem extends LightSourceEntity
 			Items.lava_bucket, 12, 
 			Items.glowstone_dust, 5, 
 			Items.nether_star, 10, 
-			Items.prismarine_crystals, 5
+			Items.prismarine_crystals, 5,
+			Item.getItemFromBlock(Blocks.torch), 0
 	);
 
 	private static Map<Item, Integer> LightingItems = new HashMap<Item, Integer>() {{
@@ -46,21 +46,15 @@ public class LightSourceItem extends LightSourceEntity
 		
 	public static int getLightFromItem(Item item)
 	{
-		int lightLevel = 0;
 		if(LightingItems.containsKey(item))
-			lightLevel = LightingItems.get(item).intValue();
+			return LightingItems.get(item).intValue();
 		else
 		{
 			Block block = Block.getBlockFromItem(item);
 			if(block != null)
-			{
-				if(block == Blocks.torch)
-					lightLevel = 0;
-				else
-					MathHelper.floor_float(block.getLightValue() * 0.75F);
-			}
+				return MathHelper.floor_float(block.getLightValue() * 0.75F);
 		}
-		return lightLevel;
+		return 0;
 	}
 	
 	/**

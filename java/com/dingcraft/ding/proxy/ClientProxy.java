@@ -11,11 +11,13 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import com.dingcraft.ding.Dingcraft;
+import com.dingcraft.ding.block.DingBlocks;
 import com.dingcraft.ding.entity.EntityArrowFission;
 import com.dingcraft.ding.entity.EntityArrowSniper;
 import com.dingcraft.ding.entity.EntityArrowTorch;
 import com.dingcraft.ding.entity.EntityArrowVoid;
 import com.dingcraft.ding.entitylighting.EntityLighting;
+import com.dingcraft.ding.item.DingItems;
 import com.dingcraft.ding.renderer.RenderArrowBase;
 
 public class ClientProxy extends CommonProxy
@@ -31,11 +33,11 @@ public class ClientProxy extends CommonProxy
 		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
 		
 		//blocks' items
-		for(Block block : Dingcraft.blocks)
+		for(Block block : DingBlocks.blocks)
 			itemModelMesher.register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(Dingcraft.MODID + ":" + this.getName(block), "inventory"));
 
 		//items
-		for(Item item : Dingcraft.items)
+		for(Item item : DingItems.items)
 			itemModelMesher.register(item, 0, new ModelResourceLocation(Dingcraft.MODID + ":" + this.getName(item), "inventory"));
 
 		//entities

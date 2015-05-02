@@ -1,6 +1,5 @@
 package com.dingcraft.ding;
 
-import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
@@ -15,8 +14,7 @@ import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.dingcraft.ding.block.BlockDing;
-import com.dingcraft.ding.block.BlockPhoton;
+import com.dingcraft.ding.block.DingBlocks;
 import com.dingcraft.ding.entity.EntityArrowFission;
 import com.dingcraft.ding.entity.EntityArrowSniper;
 import com.dingcraft.ding.entity.EntityArrowTorch;
@@ -24,10 +22,7 @@ import com.dingcraft.ding.entity.EntityArrowVoid;
 import com.dingcraft.ding.entitylighting.EntityLighting;
 import com.dingcraft.ding.eventhandler.EventHandlerBow;
 import com.dingcraft.ding.eventhandler.EventHandlerPlayerDrops;
-import com.dingcraft.ding.item.ItemDing;
-import com.dingcraft.ding.item.ItemFlashLight;
-import com.dingcraft.ding.item.ItemPocketWatch;
-import com.dingcraft.ding.item.ItemWandDing;
+import com.dingcraft.ding.item.DingItems;
 import com.dingcraft.ding.proxy.CommonProxy;
 
 @Mod(modid = Dingcraft.MODID, name = Dingcraft.MODNAME, version = Dingcraft.VERSION)
@@ -42,26 +37,12 @@ public class Dingcraft
 
 	@Instance(Dingcraft.MODID)
 	public static Dingcraft instance;
-
-	public static final Block[] blocks = new Block[] {
-		BlockDing.instance,
-//		BlockMeteor.instance,
-		BlockPhoton.instance
-	};
-	
-	public static final Item[] items = new Item[] {
-		ItemDing.instance,
-		ItemFlashLight.instance,
-		ItemPocketWatch.instance,
-		ItemWandDing.instance,
-//		new SkillOmnipunch()
-	};
 	
 	public static final DingcraftEntity[] entities = new DingcraftEntity[] {
-		new DingcraftEntity(EntityArrowFission.class),
-		new DingcraftEntity(EntityArrowVoid.class),
-		new DingcraftEntity(EntityArrowTorch.class),
-		new DingcraftEntity(EntityArrowSniper.class)
+		new DingcraftEntity(EntityArrowFission.class, "FissionArrow"),
+		new DingcraftEntity(EntityArrowVoid.class, "VoidArrow"),
+		new DingcraftEntity(EntityArrowTorch.class, "TorchArrow"),
+		new DingcraftEntity(EntityArrowSniper.class, "SniperArrow")
 	};
 	
 	public static EventHandlerBow handlerBow = new EventHandlerBow();
@@ -79,6 +60,8 @@ public class Dingcraft
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
+		DingBlocks b;
+		DingItems i;
 		proxy.registerBlockAndItem();
 		proxy.registerEntity();
 		proxy.registerRecipe();
@@ -94,8 +77,9 @@ public class Dingcraft
 	@EventHandler
 	public void stop(FMLServerStoppingEvent event)
 	{
-		ItemPocketWatch.instance.resetTimeRate();
+		DingItems.pocketWatch.resetTimeRate();
 	}
+	
 	
 	public static class DingcraftEntity
 	{

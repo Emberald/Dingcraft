@@ -7,8 +7,6 @@ import net.minecraft.entity.item.EntityFallingBlock;
 
 public class BlockMeteor extends BlockFalling
 {
-	public static final BlockMeteor instance = new BlockMeteor();
-	
 	public BlockMeteor()
 	{
 		super(Material.anvil);

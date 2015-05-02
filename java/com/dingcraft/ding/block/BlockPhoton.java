@@ -9,8 +9,6 @@ import com.dingcraft.ding.tileentity.TileEntityPhoton;
 
 public class BlockPhoton extends BlockAir implements ITileEntityProvider
 {
-	public static final BlockPhoton instance = new BlockPhoton();
-	
 	public BlockPhoton()
 	{
         super();

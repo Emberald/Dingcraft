@@ -11,8 +11,6 @@ import net.minecraft.world.World;
 
 public class ItemWandDing extends Item
 {
-	public static final ItemWandDing instance = new ItemWandDing();
-
 	public ItemWandDing()
 	{
 		this.setCreativeTab(CreativeTabs.tabCombat);

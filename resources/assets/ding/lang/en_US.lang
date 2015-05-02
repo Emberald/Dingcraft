@@ -4,6 +4,7 @@ tile.meteorBlock.name=Meteorite
 item.dingItem.name=Ding Fragment
 item.dingWand.name=Ding's Magic Wand
 item.pocketWatch.name=Dio's Lost Watch
+item.torchArrow.name=TorchArrow
 
 item.omnipunch.name=Omnipunch
 item.meteorShower.name=Rain of Flame

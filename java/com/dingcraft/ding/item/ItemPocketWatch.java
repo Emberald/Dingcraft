@@ -22,8 +22,6 @@ public class ItemPocketWatch extends Item
 	public static final double RATE_STEP = 0.05;
 	public int ticksAtRest;
 	
-	public static final ItemPocketWatch instance = new ItemPocketWatch();
-
 	public ItemPocketWatch()
 	{
 		this.setCreativeTab(CreativeTabs.tabTools);

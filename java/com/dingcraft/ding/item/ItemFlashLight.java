@@ -7,8 +7,6 @@ import com.dingcraft.ding.entitylighting.LightSourceSpotlight;
 
 public class ItemFlashLight extends Item
 {
-	public static final ItemFlashLight instance = new ItemFlashLight();
-	
 	public ItemFlashLight()
 	{
 		this.setCreativeTab(CreativeTabs.tabTools);
