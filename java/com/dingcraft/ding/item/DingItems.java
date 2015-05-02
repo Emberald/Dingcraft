@@ -12,13 +12,17 @@ public class DingItems
 	public static final ItemPocketWatch pocketWatch = new ItemPocketWatch();
 	public static final ItemFlashLight flashLight = new ItemFlashLight();
 	public static final Item arrowTorch = (new Item()).setUnlocalizedName("torchArrow").setCreativeTab(CreativeTabs.tabTools);
+	public static final Item arrowDeliverer = (new Item()).setUnlocalizedName("deliverArrow").setCreativeTab(CreativeTabs.tabTools);
+	public static final Item arrowDelivererLoaded = (new Item()).setUnlocalizedName("loadedDeliverArrow").setMaxStackSize(1);
 	
 	public static final Item[] items = new Item[] {
 		dingItem,
 		dingWand,
 		pocketWatch,
 		flashLight,
-		arrowTorch
+		arrowTorch,
+		arrowDeliverer,
+		arrowDelivererLoaded
 	};
 }
 

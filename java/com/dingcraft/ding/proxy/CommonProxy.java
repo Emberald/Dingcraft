@@ -5,6 +5,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -13,6 +14,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import com.dingcraft.ding.Dingcraft;
 import com.dingcraft.ding.block.DingBlocks;
 import com.dingcraft.ding.item.DingItems;
+import com.dingcraft.ding.item.RecipeArrowDeliverer;
 
 public class CommonProxy
 {
@@ -43,6 +45,8 @@ public class CommonProxy
 		GameRegistry.addRecipe(new ItemStack(DingItems.dingItem, 9), "A", 'A', DingBlocks.dingBlock);
 		GameRegistry.addRecipe(new ItemStack(DingItems.dingWand), "A", "B", "B", 'A', DingItems.dingItem, 'B', Items.stick);
 		GameRegistry.addShapelessRecipe(new ItemStack(DingItems.arrowTorch), Items.arrow, Item.getItemFromBlock(Blocks.torch), Items.slime_ball);
+		CraftingManager.getInstance().addRecipe(new RecipeArrowDeliverer());
+		
 		//smelting
 		GameRegistry.addSmelting(new ItemStack(Items.gold_ingot),new ItemStack(DingItems.dingItem), 4F);
 	}
