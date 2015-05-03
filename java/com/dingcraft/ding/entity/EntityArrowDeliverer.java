@@ -57,9 +57,20 @@ public class EntityArrowDeliverer extends EntityArrowBase
 	{
 		super.readEntityFromNBT(tagCompound);
 		if(tagCompound.hasKey("carriedItem", 10))
+			this.carriedItem = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("carriedItem"));
+	}
+	
+	public void findCarriedItem(ItemStack[] inventory)
+	{
+		int i;
+		for(i = 0; i < inventory.length; i++)
 		{
-			NBTTagCompound itemTag = tagCompound.getCompoundTag("carriedItem");
-			this.carriedItem = ItemStack.loadItemStackFromNBT(itemTag);
+			if(inventory[i] != null && inventory[i].getItem() == DingItems.arrowDelivererLoaded)
+			{
+				this.carriedItem = ItemStack.loadItemStackFromNBT(inventory[i].getTagCompound());
+				inventory[i] = null;
+				break;
+			}
 		}
 	}
 	
@@ -67,10 +78,7 @@ public class EntityArrowDeliverer extends EntityArrowBase
 	{
 		if (!this.worldObj.isRemote && this.ticksInGround > 0 && this.arrowShake <= 0)
 		{
-			boolean flag = this.canBePickedUp == 1 || this.canBePickedUp == 2 && entityIn.capabilities.isCreativeMode;
-			if (this.canBePickedUp == 1 && !entityIn.inventory.addItemStackToInventory(new ItemStack(DingItems.arrowDeliverer, 1)))
-				flag = false;
-			if (flag)
+			if (entityIn.inventory.addItemStackToInventory(new ItemStack(DingItems.arrowDeliverer, 1)))
 			{
 				this.playSound("random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 				((WorldServer)entityIn.worldObj).getEntityTracker().sendToAllTrackingEntity(this, new S0DPacketCollectItem(this.getEntityId(), entityIn.getEntityId()));

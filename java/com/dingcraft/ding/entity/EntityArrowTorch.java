@@ -1,5 +1,7 @@
 package com.dingcraft.ding.entity;
 
+import com.dingcraft.ding.item.DingItems;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
@@ -22,21 +24,25 @@ public class EntityArrowTorch extends EntityArrowBase
 	public EntityArrowTorch(World worldIn)
 	{
 		super(worldIn);
+		this.arrowItem = DingItems.arrowTorch;
 	}
 
 	public EntityArrowTorch(World worldIn, double x, double y, double z)
 	{
 		super(worldIn, x, y, z);
+		this.arrowItem = DingItems.arrowTorch;
 	}
 	
 	public EntityArrowTorch(World worldIn, EntityLivingBase shooter, EntityLivingBase target, float velocity, float inaccuracy)
 	{
 		super(worldIn, shooter, target, velocity, inaccuracy);
+		this.arrowItem = DingItems.arrowTorch;
 	}
 	
 	public EntityArrowTorch(World worldIn, EntityLivingBase shooter, float charge)
 	{
 		super(worldIn, shooter, charge);
+		this.arrowItem = DingItems.arrowTorch;
 	}
 		
 	protected int onEntityHit(Entity entity, float damage)

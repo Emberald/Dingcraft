@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import com.dingcraft.ding.Dingcraft;
 import com.dingcraft.ding.block.DingBlocks;
+import com.dingcraft.ding.entity.EntityArrowDeliverer;
 import com.dingcraft.ding.entity.EntityArrowFission;
 import com.dingcraft.ding.entity.EntityArrowSniper;
 import com.dingcraft.ding.entity.EntityArrowTorch;
@@ -45,6 +46,8 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityArrowVoid.class, new RenderArrowBase(renderManager, Dingcraft.MODID + ":textures/entity/arrowDing.png"));
 		RenderingRegistry.registerEntityRenderingHandler(EntityArrowTorch.class, new RenderArrowBase(renderManager, "textures/entity/arrow.png"));
 		RenderingRegistry.registerEntityRenderingHandler(EntityArrowSniper.class, new RenderArrowBase(renderManager, "textures/entity/arrow.png"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityArrowDeliverer.class, new RenderArrowBase(renderManager, "textures/entity/arrow.png"));
+		
 //		RenderingRegistry.registerEntityRenderingHandler(EntityOmnipunch.class, new RenderOmnipunch(renderManager));
 	}
 

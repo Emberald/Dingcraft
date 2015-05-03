@@ -46,6 +46,8 @@ public class CommonProxy
 		GameRegistry.addRecipe(new ItemStack(DingItems.dingWand), "A", "B", "B", 'A', DingItems.dingItem, 'B', Items.stick);
 		GameRegistry.addShapelessRecipe(new ItemStack(DingItems.arrowTorch), Items.arrow, Item.getItemFromBlock(Blocks.torch), Items.slime_ball);
 		CraftingManager.getInstance().addRecipe(new RecipeArrowDeliverer());
+		GameRegistry.addShapelessRecipe(new ItemStack(DingItems.arrowDeliverer), Items.arrow, Items.leather, Items.string);
+		GameRegistry.addShapelessRecipe(new ItemStack(DingItems.arrowDeliverer), Items.arrow, Items.rabbit_hide, Items.string);
 		
 		//smelting
 		GameRegistry.addSmelting(new ItemStack(Items.gold_ingot),new ItemStack(DingItems.dingItem), 4F);

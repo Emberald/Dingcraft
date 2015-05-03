@@ -5,6 +5,9 @@ item.dingItem.name=Ding Fragment
 item.dingWand.name=Ding's Magic Wand
 item.pocketWatch.name=Dio's Lost Watch
 item.torchArrow.name=TorchArrow
+item.deliverArrow.name=DeliverArrow
+item.loadedDeliverArrow.name=DeliverArrow
+item.flashLight.name=FlashLight
 
 item.omnipunch.name=Omnipunch
 item.meteorShower.name=Rain of Flame

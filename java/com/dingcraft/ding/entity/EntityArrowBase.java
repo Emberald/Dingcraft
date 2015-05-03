@@ -12,6 +12,7 @@ import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S0DPacketCollectItem;
@@ -52,6 +53,7 @@ public abstract class EntityArrowBase extends Entity implements IProjectile
 	protected float dragInWater = 0.6F;
 	protected float gravity = 0.05F;
 	protected EnumParticleTypes typePartical = EnumParticleTypes.CRIT;
+	protected Item arrowItem = Items.arrow;
 	
 	public EntityArrowBase(World worldIn)
 	{
@@ -231,7 +233,7 @@ public abstract class EntityArrowBase extends Entity implements IProjectile
 		if (!this.worldObj.isRemote && this.ticksInGround > 0 && this.arrowShake <= 0)
 		{
 			boolean flag = this.canBePickedUp == 1 || this.canBePickedUp == 2 && entityIn.capabilities.isCreativeMode;
-			if (this.canBePickedUp == 1 && !entityIn.inventory.addItemStackToInventory(new ItemStack(Items.arrow, 1)))
+			if (this.canBePickedUp == 1 && !entityIn.inventory.addItemStackToInventory(new ItemStack(this.arrowItem, 1)))
 				flag = false;
 			if (flag)
 			{
