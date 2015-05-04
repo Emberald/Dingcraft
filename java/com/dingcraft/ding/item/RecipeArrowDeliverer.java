@@ -70,7 +70,7 @@ public class RecipeArrowDeliverer implements IRecipe
 		ItemStack[] remainingItems = new ItemStack[pattern.getSizeInventory()];
 		int i;
 		for(i = 0; i < remainingItems.length; i++)
-			remainingItems[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(pattern.getStackInSlot(i));
+			remainingItems[i] = null;
 		return remainingItems;
 	}
 }

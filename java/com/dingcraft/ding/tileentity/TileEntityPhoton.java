@@ -7,6 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import com.dingcraft.ding.Dingcraft;
 import com.dingcraft.ding.block.BlockPhoton;
+import com.dingcraft.ding.block.DingBlocks;
 
 public class TileEntityPhoton extends TileEntity implements IUpdatePlayerListBox
 {
@@ -28,7 +29,7 @@ public class TileEntityPhoton extends TileEntity implements IUpdatePlayerListBox
     	{
     		IBlockState blockState = this.worldObj.getBlockState(pos);
     		Block lightedBlock = blockState.getBlock();
-    		if(lightedBlock == BlockPhoton.instance)
+    		if(lightedBlock == DingBlocks.photonBlock)
     		{
     			this.worldObj.setBlockToAir(this.pos);    			
     		}

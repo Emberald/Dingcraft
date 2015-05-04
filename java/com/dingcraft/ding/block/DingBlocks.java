@@ -1,8 +1,8 @@
 package com.dingcraft.ding.block;
 
-import java.lang.reflect.Field;
-
 import net.minecraft.block.Block;
+
+import com.dingcraft.ding.Dingcraft;
 
 public class DingBlocks
 {
@@ -10,10 +10,15 @@ public class DingBlocks
 	public static final BlockPhoton photonBlock = new BlockPhoton();
 	public static final BlockMeteor meteorBlock = new BlockMeteor();
 
-	public static final Block[] blocks = new Block[] {
-		dingBlock,
-		photonBlock,
-		meteorBlock
-	};
-
+	public static void registerAll()
+	{
+		put(dingBlock, 0, "dingBlock");
+		put(photonBlock, 0, "photonBlock");
+		put(meteorBlock, 0, "meteorBlock");
+	}
+	
+	private static void put(Block block, Object... resourceMap)
+	{
+		Dingcraft.proxy.registerBlock(block, resourceMap);
+	}
 }

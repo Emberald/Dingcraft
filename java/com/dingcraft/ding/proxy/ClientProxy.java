@@ -1,54 +1,59 @@
 package com.dingcraft.ding.proxy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import com.dingcraft.ding.Dingcraft;
-import com.dingcraft.ding.block.DingBlocks;
-import com.dingcraft.ding.entity.EntityArrowDeliverer;
-import com.dingcraft.ding.entity.EntityArrowFission;
-import com.dingcraft.ding.entity.EntityArrowSniper;
-import com.dingcraft.ding.entity.EntityArrowTorch;
-import com.dingcraft.ding.entity.EntityArrowVoid;
+import com.dingcraft.ding.entity.DingEntities;
 import com.dingcraft.ding.entitylighting.EntityLighting;
-import com.dingcraft.ding.item.DingItems;
-import com.dingcraft.ding.renderer.RenderArrowBase;
 
 public class ClientProxy extends CommonProxy
 {	
+	private final List<Item> renderItems = new ArrayList<Item>();
+	private final List<Integer> renderItemMetas = new ArrayList<Integer>();
+	private final List<String> renderItemResources = new ArrayList<String>();
 	
+	public void registerBlock(Block block, Object... params)
+	{
+		super.registerBlock(block, params);
+		for(int i = 0; i < params.length; i += 2)
+		{
+			renderItems.add(Item.getItemFromBlock(block));
+			renderItemMetas.add((Integer)params[i]);
+			renderItemResources.add(Dingcraft.MODID + ":" + (String)params[i + 1]);
+		}
+	}
 	
+	public void registerItem(Item item, Object... params)
+	{
+		super.registerItem(item, params);
+		for(int i = 0; i < params.length; i += 2)
+		{
+			renderItems.add(item);
+			renderItemMetas.add((Integer)params[i]);
+			renderItemResources.add(Dingcraft.MODID + ":" + (String)params[i + 1]);
+		}
+	}
+		
 	public void registerRenderer()
 	{
 		super.registerRenderer();
-		//renderers are client side only, so register here.
-		
+				
+		//blocks & items
 		ItemModelMesher itemModelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+		for(int i = 0; i < renderItems.size(); i++)
+			itemModelMesher.register(renderItems.get(i), renderItemMetas.get(i), new ModelResourceLocation(renderItemResources.get(i), "inventory"));
 		
-		//blocks' items
-		for(Block block : DingBlocks.blocks)
-			itemModelMesher.register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(Dingcraft.MODID + ":" + this.getName(block), "inventory"));
-
-		//items
-		for(Item item : DingItems.items)
-			itemModelMesher.register(item, 0, new ModelResourceLocation(Dingcraft.MODID + ":" + this.getName(item), "inventory"));
-
 		//entities
-		RenderingRegistry.registerEntityRenderingHandler(EntityArrowFission.class, new RenderArrowBase(renderManager, "textures/entity/arrow.png"));
-		RenderingRegistry.registerEntityRenderingHandler(EntityArrowVoid.class, new RenderArrowBase(renderManager, Dingcraft.MODID + ":textures/entity/arrowDing.png"));
-		RenderingRegistry.registerEntityRenderingHandler(EntityArrowTorch.class, new RenderArrowBase(renderManager, "textures/entity/arrow.png"));
-		RenderingRegistry.registerEntityRenderingHandler(EntityArrowSniper.class, new RenderArrowBase(renderManager, "textures/entity/arrow.png"));
-		RenderingRegistry.registerEntityRenderingHandler(EntityArrowDeliverer.class, new RenderArrowBase(renderManager, "textures/entity/arrow.png"));
-		
-//		RenderingRegistry.registerEntityRenderingHandler(EntityOmnipunch.class, new RenderOmnipunch(renderManager));
+		DingEntities.registerRenderers(Minecraft.getMinecraft().getRenderManager());
 	}
 
 	public void registerHandler()

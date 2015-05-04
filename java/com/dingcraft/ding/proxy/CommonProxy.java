@@ -1,58 +1,25 @@
 package com.dingcraft.ding.proxy;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.dingcraft.ding.Dingcraft;
-import com.dingcraft.ding.block.DingBlocks;
-import com.dingcraft.ding.item.DingItems;
-import com.dingcraft.ding.item.RecipeArrowDeliverer;
 
 public class CommonProxy
 {
-	public void registerBlockAndItem()
+	public void registerBlock(Block block, Object... params)
 	{
-		for(Block block : DingBlocks.blocks)
-			GameRegistry.registerBlock(block, this.getName(block));
-		for(Item item : DingItems.items)
-			GameRegistry.registerItem(item, this.getName(item));
+		GameRegistry.registerBlock(block, this.getName(block));
 	}
 	
-	public void registerEntity() 
+	public void registerItem(Item item, Object... params)
 	{
-		int idCounter = 0;
-
-		//entity
-		for(Dingcraft.DingcraftEntity entity : Dingcraft.entities)
-			EntityRegistry.registerModEntity(entity.entityClass, entity.name, ++idCounter, Dingcraft.instance, entity.trackingRange, entity.updateFrequency, entity.sendsVelocityUpdates);
-
-		//tileentity
-//		GameRegistry.registerTileEntity(com.dingcraft.ding.tileentity.TileEntityPhoton.class, "PhotonTileEntity");
+		GameRegistry.registerItem(item, this.getName(item));
 	}
 	
-	public void registerRecipe() 
-	{
-		//recipe
-		GameRegistry.addRecipe(new ItemStack(DingBlocks.dingBlock), "AAA", "AAA", "AAA", 'A', DingItems.dingItem);
-		GameRegistry.addRecipe(new ItemStack(DingItems.dingItem, 9), "A", 'A', DingBlocks.dingBlock);
-		GameRegistry.addRecipe(new ItemStack(DingItems.dingWand), "A", "B", "B", 'A', DingItems.dingItem, 'B', Items.stick);
-		GameRegistry.addShapelessRecipe(new ItemStack(DingItems.arrowTorch), Items.arrow, Item.getItemFromBlock(Blocks.torch), Items.slime_ball);
-		CraftingManager.getInstance().addRecipe(new RecipeArrowDeliverer());
-		GameRegistry.addShapelessRecipe(new ItemStack(DingItems.arrowDeliverer), Items.arrow, Items.leather, Items.string);
-		GameRegistry.addShapelessRecipe(new ItemStack(DingItems.arrowDeliverer), Items.arrow, Items.rabbit_hide, Items.string);
-		
-		//smelting
-		GameRegistry.addSmelting(new ItemStack(Items.gold_ingot),new ItemStack(DingItems.dingItem), 4F);
-	}
-
 	public void registerRenderer() {}
 	
 	public void registerHandler()
