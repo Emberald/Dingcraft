@@ -43,7 +43,7 @@ public abstract class LightSourceEntity
 	public abstract boolean onUpdate();
 
 	/**
-	 * This method is called before lighting of the entity is recomputed.</br>
+	 * This method is called after <i>onUpdate</i> method is called, and before lighting of the entity is recomputed.</br>
 	 * This method should update the position of current light source block of the entity.</br>
 	 * Override this method in subclass if you want to modify the position of the light source block.
 	 * @return Old block position if the entity has moved, and null otherwise.

@@ -2,18 +2,25 @@ package com.dingcraft.ding.eventhandler;
 
 import java.util.Random;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.dingcraft.ding.Dingcraft;
 import com.dingcraft.ding.entity.EntityArrowBase;
 import com.dingcraft.ding.entity.EntityArrowFission;
 import com.dingcraft.ding.entity.EntityArrowTorch;
 import com.dingcraft.ding.entity.EntityArrowVoid;
+import com.dingcraft.ding.entity.EntityCamera;
 
 public class EventHandlerBow
 {	
@@ -217,5 +224,15 @@ public class EventHandlerBow
 //			}
 //		}
 	}
-	
+//	
+//	@SideOnly(Side.CLIENT)
+//	@SubscribeEvent
+//	public void arrowCam(EntityJoinWorldEvent event)
+//	{
+//		if(event.entity instanceof EntityArrowTorch && event.world instanceof WorldClient)
+//		{
+//			EntityCamera.startCam(Minecraft.getMinecraft().thePlayer, event.entity);
+//		}
+//	}
+
 }	

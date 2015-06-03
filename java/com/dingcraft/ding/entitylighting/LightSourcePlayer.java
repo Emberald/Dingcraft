@@ -1,11 +1,11 @@
 package com.dingcraft.ding.entitylighting;
 
+import java.util.function.Function;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 
 import com.dingcraft.ding.Dingcraft;
 
@@ -33,7 +33,7 @@ public class LightSourcePlayer extends LightSourceEntity
 
 		ItemStack itemStack = ((EntityPlayer)this.entity).getHeldItem();
 		if(itemStack != null)
-			this.lightLevel = LightSourceItem.getLightFromItem(itemStack.getItem());
+			this.lightLevel = LightSourceDroppedItem.getLightFromItem(itemStack.getItem());
 		else
 			this.lightLevel = 0;
 		return this.entity.isDead;
@@ -50,6 +50,19 @@ public class LightSourcePlayer extends LightSourceEntity
 		}
 		else
 			return null;
+	}
+	
+	public static void register()
+	{
+		EntityLighting.entityJoinWorldChecker.add(new Function<Entity, LightSourceEntity>() {
+			public LightSourceEntity apply(Entity entity)
+			{
+				if(entity instanceof EntityPlayer)
+					return new LightSourcePlayer((EntityPlayer)entity);
+				else
+					return null;
+			}
+		});
 	}
 
 }

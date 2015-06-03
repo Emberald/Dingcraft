@@ -1,6 +1,8 @@
 package com.dingcraft.ding.entitylighting;
 
-import net.minecraft.util.BlockPos;
+import java.util.function.Function;
+
+import net.minecraft.entity.Entity;
 
 import com.dingcraft.ding.entity.EntityArrowTorch;
 
@@ -15,5 +17,17 @@ public class LightSourceArrowTorch extends LightSourceEntity
 	{
 		return this.entity.isDead;
 	}
-
+	
+	public static void register()
+	{
+		EntityLighting.entityJoinWorldChecker.add(new Function<Entity, LightSourceEntity>() {
+			public LightSourceEntity apply(Entity entity)
+			{
+				if(entity instanceof EntityArrowTorch)
+					return new LightSourceArrowTorch((EntityArrowTorch)entity);
+				else
+					return null;
+			}
+		});
+	}
 }

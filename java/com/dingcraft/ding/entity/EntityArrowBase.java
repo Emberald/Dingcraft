@@ -268,6 +268,11 @@ public abstract class EntityArrowBase extends Entity implements IProjectile
 	{
 		return false;
 	}
+	
+	public Entity getShooter()
+	{
+		return this.shooter;
+	}
 
 	public void onUpdate()
 	{
@@ -461,12 +466,12 @@ public abstract class EntityArrowBase extends Entity implements IProjectile
 	}
 
 	/**
-     * @return
-     *   0 when canceling hit and damage,
-     *   1 when canceling damage only, 
-     *   2 when canceling hit but causing damage, and 
-     *   3 when canceling nothing.
-     */
+	 * @return
+	 *   0 when canceling hit and damage,
+	 *   1 when canceling damage only, 
+	 *   2 when canceling hit but causing damage, and 
+	 *   3 when canceling nothing.
+	 */
 	protected abstract int onEntityHit(Entity entity, float damage);
 
 	/**

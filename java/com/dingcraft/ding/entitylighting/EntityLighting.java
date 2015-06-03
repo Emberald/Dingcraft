@@ -1,17 +1,11 @@
 package com.dingcraft.ding.entitylighting;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityMinecartFurnace;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
@@ -23,8 +17,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.dingcraft.ding.entity.EntityArrowTorch;
-
 @SideOnly(Side.CLIENT)
 public class EntityLighting
 {
@@ -32,6 +24,9 @@ public class EntityLighting
 	private List<LightSourceEntity> trackedEntities;
 	protected short[] lightUpdateBlockQueue;
 	protected int[] lightUpdateBlockFlag;
+	public static List<Function<Entity, LightSourceEntity>> entityJoinWorldChecker = new ArrayList<Function<Entity, LightSourceEntity>>();
+	public static List<Function<Entity, LightSourceEntity>> entityUpdateChecker = new ArrayList<Function<Entity, LightSourceEntity>>();
+	private static boolean registered = false;
 	
 	public EntityLighting()
 	{
@@ -39,6 +34,17 @@ public class EntityLighting
 		this.trackedEntities = new ArrayList<LightSourceEntity>();
 		this.lightUpdateBlockFlag = new int[1024];
 		this.lightUpdateBlockQueue = new short[32768];
+		if(!registered)
+		{
+			LightSourceArrowTorch.register();
+			LightSourceBurningCreature.register();
+			LightSourceBurningItem.register();
+			LightSourceDroppedItem.register();
+			LightSourceItemFrame.register();
+			LightSourceMinecartFurnace.register();
+			LightSourcePlayer.register();
+			registered = true;
+		}
 	}
 	
 	/**
@@ -74,25 +80,14 @@ public class EntityLighting
 	{
 		if(event.world == this.mcInstance.theWorld)
 		{
-			if(event.entity instanceof EntityArrowTorch)
+			for(Function<Entity, LightSourceEntity> checker : entityJoinWorldChecker)
 			{
-				LightSourceArrowTorch arrow = new LightSourceArrowTorch((EntityArrowTorch)event.entity);
-				this.addEntity(arrow);
-			}
-			else if(event.entity instanceof EntityPlayer)
-			{
-				LightSourcePlayer player = new LightSourcePlayer((EntityPlayer)event.entity);
-				this.addEntity(player);
-			}
-			else if(event.entity instanceof EntityItem)
-			{
-				LightSourceItem item = new LightSourceItem((EntityItem)event.entity);
-				this.addEntity(item);
-			}
-			else if(event.entity instanceof EntityMinecartFurnace)
-			{
-				LightSourceMinecartFurnace minecart = new LightSourceMinecartFurnace((EntityMinecartFurnace)event.entity);
-				this.addEntity(minecart);
+				LightSourceEntity lightSource = checker.apply(event.entity);
+				if(lightSource != null)
+				{
+					this.addEntity(lightSource);
+					break;
+				}
 			}
 		}
 	}
@@ -101,7 +96,7 @@ public class EntityLighting
 	public void tick(TickEvent.ClientTickEvent event)
 	{
 		if(event.phase == Phase.START || this.mcInstance.theWorld == null) return;
-		LightSourceEntity lightEntity = null;		
+		LightSourceEntity lightEntity = null;
 		
 		//remove entities
 		int i = 0;
@@ -119,49 +114,23 @@ public class EntityLighting
 				i++;
 		}
 		int size;
-		int sizeE;
 		
 		//add entities
-		if(this.mcInstance.theWorld != null)
+		for(Object entity : this.mcInstance.theWorld.loadedEntityList)
 		{
-			Iterator<Entity> iteratorEntity = this.mcInstance.theWorld.loadedEntityList.iterator();
-			Entity entity;
-			while(iteratorEntity.hasNext())
+			size = this.trackedEntities.size();
+			for(i = 0; i < size; i++)
+				if(this.trackedEntities.get(i).entity == entity) break;
+			if(i == size)
 			{
-				entity = iteratorEntity.next();
-				if(entity instanceof EntityLivingBase && entity.isBurning())
+				for(Function<Entity, LightSourceEntity> checker : entityUpdateChecker)
 				{
-					size = this.trackedEntities.size();
-					for(i = 0; i < size; i++)
-						if(this.trackedEntities.get(i).entity == entity) break;
-					if(i == size)
+					LightSourceEntity lightSource = checker.apply((Entity)entity);
+					if(lightSource != null)
 					{
-						LightSourceBurningCreature entry = new LightSourceBurningCreature((EntityLivingBase)entity);
-						this.addEntity(entry);
+						this.addEntity(lightSource);
+						break;
 					}
-				}
-				else if(entity instanceof EntityItemFrame)
-				{
-					int light = LightSourceItemFrame.getLightFromItemFrame((EntityItemFrame)entity);
-					if(light != 0)
-					{
-						size = this.trackedEntities.size();
-						for(i = 0; i < size; i++)
-							if(this.trackedEntities.get(i).entity == entity) break;
-						if(i == size)
-						{
-							LightSourceItemFrame itemFrame = new LightSourceItemFrame((EntityItemFrame)entity, light);
-							this.addEntity(itemFrame);
-						}
-					}
-				}
-				else if(entity instanceof EntityArrow && entity.isBurning())
-				{
-					size = this.trackedEntities.size();
-					for(i = 0; i < size; i++)
-						if(this.trackedEntities.get(i).entity == entity) break;
-					if(i == size)
-						this.addEntity(new LightSourceBurningItem(entity, 7));
 				}
 			}
 		}
@@ -275,8 +244,6 @@ public class EntityLighting
 				}
 			}
 		}
-//		if(listEnd > 10)
-//			System.out.printf("list size = %d\n", listEnd);
 	}
 	
 	private boolean inRange(BlockPos pos, BlockPos reference)
@@ -302,12 +269,9 @@ public class EntityLighting
 
 	public int getBlockLightEmitLvl(BlockPos pos)
 	{
-		LightSourceEntity entry;
 		int lightLvl = 0;
-		Iterator<LightSourceEntity> iterator = this.trackedEntities.iterator();
-		while(iterator.hasNext())
+		for(LightSourceEntity entry : this.trackedEntities)
 		{
-			entry = iterator.next();
 			if(entry.getBlockPos().equals(pos) && entry.entity.worldObj == this.mcInstance.theWorld)
 				lightLvl = Math.max(lightLvl, entry.getLightLevel());
 		}

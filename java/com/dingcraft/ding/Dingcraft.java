@@ -20,6 +20,7 @@ import com.dingcraft.ding.eventhandler.EventHandlerBow;
 import com.dingcraft.ding.eventhandler.EventHandlerPlayerDrops;
 import com.dingcraft.ding.item.DingItems;
 import com.dingcraft.ding.proxy.CommonProxy;
+import com.dingcraft.ding.tileentity.DingTileEntities;
 
 @Mod(modid = Dingcraft.MODID, name = Dingcraft.MODNAME, version = Dingcraft.VERSION)
 public class Dingcraft
@@ -52,6 +53,7 @@ public class Dingcraft
 		DingBlocks.registerAll();
 		DingItems.registerAll();
 		DingEntities.registerAll();
+		DingTileEntities.registerAll();
 		DingItems.registerRecipes();
 	}
 

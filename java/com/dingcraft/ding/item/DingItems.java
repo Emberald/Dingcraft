@@ -1,11 +1,13 @@
 package com.dingcraft.ding.item;
 
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.dingcraft.ding.Dingcraft;
@@ -34,22 +36,39 @@ public class DingItems
 	
 	public static void registerRecipes()
 	{
-		//crafting
-		GameRegistry.addRecipe(new ItemStack(DingBlocks.dingBlock), "AAA", "AAA", "AAA", 'A', DingItems.dingItem);
-		GameRegistry.addShapelessRecipe(new ItemStack(DingItems.dingItem, 9), Item.getItemFromBlock(DingBlocks.dingBlock));
-		GameRegistry.addRecipe(new ItemStack(DingItems.dingWand), "A", "B", "B", 'A', DingItems.dingItem, 'B', Items.stick);
-		GameRegistry.addShapelessRecipe(new ItemStack(DingItems.arrowTorch), Items.arrow, Item.getItemFromBlock(Blocks.torch), Items.slime_ball);
-		CraftingManager.getInstance().addRecipe(new RecipeArrowDeliverer());
-		GameRegistry.addShapelessRecipe(new ItemStack(DingItems.arrowDeliverer), Items.arrow, Items.leather, Items.string);
-		GameRegistry.addShapelessRecipe(new ItemStack(DingItems.arrowDeliverer), Items.arrow, Items.rabbit_hide, Items.string);
+		crafting(new ItemStack(DingBlocks.dingBlock), "AAA", "AAA", "AAA", 'A', DingItems.dingItem);
+		crafting(new ItemStack(DingItems.dingItem, 9), DingBlocks.dingBlock);
+		crafting(new ItemStack(DingItems.dingWand), "A", "B", "B", 'A', DingItems.dingItem, 'B', Items.stick);
+		crafting(new ItemStack(DingItems.arrowTorch), Items.arrow, Blocks.torch, Items.slime_ball);
+		crafting(new RecipeArrowDeliverer());
+		crafting(new ItemStack(DingItems.arrowDeliverer), Items.arrow, Items.leather, Items.string);
+		crafting(new ItemStack(DingItems.arrowDeliverer), Items.arrow, Items.rabbit_hide, Items.string);
 		
-		//smelting
-		GameRegistry.addSmelting(new ItemStack(Items.gold_ingot),new ItemStack(DingItems.dingItem), 4F);
+		smelting(Items.gold_ingot, DingItems.dingItem, 4F);
 	}
 	
 	private static void put(Item item, Object... resourceMap)
 	{
 		Dingcraft.proxy.registerItem(item, resourceMap);
 	}
+	
+	private static void crafting(ItemStack output, Object... params)
+	{
+		if(params[0] instanceof String)
+			GameRegistry.addRecipe(output, params);
+		else if(params[0] instanceof Item || params[0] instanceof Block || params[0] instanceof ItemStack)
+			GameRegistry.addShapelessRecipe(output, params);
+	}
+	
+	private static void crafting(IRecipe recipe)
+	{
+		CraftingManager.getInstance().addRecipe(recipe);
+	}
+	
+	private static void smelting(Item input, Item output, float xp)
+	{
+		GameRegistry.addSmelting(new ItemStack(input, 1, 0), new ItemStack(output, 1, 0), xp);
+	}
+
 }
 

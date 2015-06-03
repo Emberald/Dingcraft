@@ -6,7 +6,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.dingcraft.ding.Dingcraft;
-import com.dingcraft.ding.renderer.*;
+import com.dingcraft.ding.renderer.RenderArrowBase;
 
 public class DingEntities
 {
@@ -20,6 +20,7 @@ public class DingEntities
 		put(EntityArrowTorch.class, "TorchArrow");
 		put(EntityArrowSniper.class, "SniperArrow");
 		put(EntityArrowDeliverer.class, "DeliverArrow");
+		put(EntityCamera.class, "Camera");
 	}
 	
 	@SideOnly(Side.CLIENT)

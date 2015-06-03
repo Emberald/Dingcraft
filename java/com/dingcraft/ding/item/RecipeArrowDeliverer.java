@@ -56,7 +56,7 @@ public class RecipeArrowDeliverer implements IRecipe
 
 	public int getRecipeSize()
 	{
-		return 7;
+		return 4;
 	}
 
 	public ItemStack getRecipeOutput()

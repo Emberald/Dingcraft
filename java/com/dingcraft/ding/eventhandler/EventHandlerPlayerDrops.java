@@ -1,11 +1,9 @@
 package com.dingcraft.ding.eventhandler;
 
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import com.dingcraft.ding.Dingcraft;
 import com.dingcraft.ding.item.DingItems;
 import com.dingcraft.ding.item.ItemPocketWatch;
 

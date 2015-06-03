@@ -1,5 +1,8 @@
 package com.dingcraft.ding.entitylighting;
 
+import java.util.function.Function;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.item.ItemStack;
 
@@ -22,6 +25,20 @@ public class LightSourceItemFrame extends LightSourceEntity
 		if(itemStack == null)
 			return 0;
 		else
-			return LightSourceItem.getLightFromItem(itemStack.getItem());
+			return LightSourceDroppedItem.getLightFromItem(itemStack.getItem());
+	}
+	
+	public static void register()
+	{
+		EntityLighting.entityUpdateChecker.add(new Function<Entity, LightSourceEntity>() {
+			public LightSourceEntity apply(Entity entity)
+			{
+				int light;
+				if(entity instanceof EntityItemFrame && (light = getLightFromItemFrame((EntityItemFrame)entity)) != 0)
+					return new LightSourceItemFrame((EntityItemFrame)entity, light);
+				else
+					return null;
+			}
+		});
 	}
 }

@@ -16,7 +16,7 @@ import com.dingcraft.ding.entity.DingEntities;
 import com.dingcraft.ding.entitylighting.EntityLighting;
 
 public class ClientProxy extends CommonProxy
-{	
+{
 	private final List<Item> renderItems = new ArrayList<Item>();
 	private final List<Integer> renderItemMetas = new ArrayList<Integer>();
 	private final List<String> renderItemResources = new ArrayList<String>();
@@ -42,11 +42,11 @@ public class ClientProxy extends CommonProxy
 			renderItemResources.add(Dingcraft.MODID + ":" + (String)params[i + 1]);
 		}
 	}
-		
+	
 	public void registerRenderer()
 	{
 		super.registerRenderer();
-				
+		
 		//blocks & items
 		ItemModelMesher itemModelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		for(int i = 0; i < renderItems.size(); i++)

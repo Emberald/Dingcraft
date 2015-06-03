@@ -2,8 +2,10 @@ package com.dingcraft.ding.entitylighting;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -12,7 +14,7 @@ import net.minecraft.util.MathHelper;
 
 import com.google.common.collect.ImmutableMap;
 
-public class LightSourceItem extends LightSourceEntity
+public class LightSourceDroppedItem extends LightSourceEntity
 {
 	public static final Map VANILLA_ITEMS = ImmutableMap.of(
 			Items.lava_bucket, 12, 
@@ -22,13 +24,13 @@ public class LightSourceItem extends LightSourceEntity
 			Item.getItemFromBlock(Blocks.torch), 0
 	);
 
-	private static Map<Item, Integer> LightingItems = new HashMap<Item, Integer>() {{
+	private static HashMap<Item, Integer> LightingItems = new HashMap<Item, Integer>() {{
 		putAll(VANILLA_ITEMS);
 	}};
 	
 	Item item = null;
 	
-	public LightSourceItem(EntityItem item)
+	public LightSourceDroppedItem(EntityItem item)
 	{
 		super(item, 0);
 	}
@@ -38,7 +40,7 @@ public class LightSourceItem extends LightSourceEntity
 		if(this.item == null)
 		{
 			this.item = ((EntityItem)this.entity).getEntityItem().getItem();
-			this.lightLevel = LightSourceItem.getLightFromItem(this.item);
+			this.lightLevel = LightSourceDroppedItem.getLightFromItem(this.item);
 			if(this.lightLevel == 0) return true;
 		}
 		return this.entity.isDead;
@@ -47,7 +49,7 @@ public class LightSourceItem extends LightSourceEntity
 	public static int getLightFromItem(Item item)
 	{
 		if(LightingItems.containsKey(item))
-			return LightingItems.get(item).intValue();
+			return LightingItems.get(item);
 		else
 		{
 			Block block = Block.getBlockFromItem(item);
@@ -55,6 +57,19 @@ public class LightSourceItem extends LightSourceEntity
 				return MathHelper.floor_float(block.getLightValue() * 0.75F);
 		}
 		return 0;
+	}
+	
+	public static void register()
+	{
+		EntityLighting.entityJoinWorldChecker.add(new Function<Entity, LightSourceEntity>() {
+			public LightSourceEntity apply(Entity entity)
+			{
+				if(entity instanceof EntityItem)
+					return new LightSourceDroppedItem((EntityItem)entity);
+				else
+					return null;
+			}
+		});
 	}
 	
 	/**

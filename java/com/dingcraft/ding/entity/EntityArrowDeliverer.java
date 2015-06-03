@@ -1,12 +1,8 @@
 package com.dingcraft.ding.entity;
 
-import com.dingcraft.ding.item.DingItems;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S0DPacketCollectItem;
@@ -17,6 +13,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+
+import com.dingcraft.ding.item.DingItems;
 
 public class EntityArrowDeliverer extends EntityArrowBase
 {
